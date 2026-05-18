@@ -66,7 +66,7 @@
         
         <div class="input-grp">
             <label>최근 수정 시각</label>
-            <input type="text" id="in-edit-time" value="2026-05-18 19:15:00" oninput="updatePreview()">
+            <input type="text" id="in-edit-time" value="2026-01-23 45:67:89" oninput="updatePreview()">
         </div>
 
         <div class="input-grp"> 
@@ -76,7 +76,7 @@
         
         <div class="input-grp" style="display: flex; align-items: center; gap: 8px; background: #def1e4; padding: 10px; border-radius: 6px;">
             <input type="checkbox" id="in-spoiler" checked onchange="updatePreview()" style="width: auto; margin: 0;">
-            <label style="margin: 0; color: #856404;">상단에 스포일러 경고 표시</label>
+            <label style="margin: 0; color: #004d40;">상단에 스포일러 경고 표시</label>
         </div>
 
         <div class="section-head">2. 프로필 표 (인포박스)</div>
@@ -121,7 +121,8 @@
              <b>본문 특수 태그 가이드</b><br>
             ➀ 각주: <code>[각주:설명내용]</code><br>
             ➁ 인용구: <code>[인용구:원문대사|번역설명]</code><br>
-            ➂ <b>원하는 위치 가로 배열 사진</b>: 아래 사진 추가기에서 등록한 순서대로 본문 원하는 자리에 <code>[사진:1][사진:2]</code> 처럼 붙여 쓰기
+            ➂ 원하는 위치 가로 배열 사진: 등록한 순서대로 본문 원하는 자리에 <code>[사진:1][사진:2]</code> 처럼 붙여 쓰기<br>
+            ➃ 사진 밑 커미션 출처 삽입: 태그 뒤에 파이프 기호를 쓰고 출처 기입 ⁃ ⩊ ⁃  예) <code>[사진:1|커미션 출처]</code>
         </div>
         
         <div id="sections-container"></div>
@@ -328,36 +329,44 @@
                 return fnHtml;
             });
 
-            // [사진:1][사진:2] 연속 사용 가로 배열 처리
+            // [사진:1][사진:2|출처] 연속 사용 및 출처 가로 배열 처리 정규식 개조
             let usedImageIndices = new Set();
-            html = html.replace(/(?:\[사진:(\d+)\])+/g, function(fullMatch) {
-                let matchIndices = [];
-                let regex = /\[사진:(\d+)\]/g;
+            html = html.replace(/(?:\[사진:(\d+)(?:\|([^\]]+))?\])+/g, function(fullMatch) {
+                let matchData = [];
+                let regex = /\[사진:(\d+)(?:\|([^\]]+))?\]/g;
                 let m;
                 while ((m = regex.exec(fullMatch)) !== null) {
-                    matchIndices.push(parseInt(m[1]) - 1);
+                    matchData.push({ idx: parseInt(m[1]) - 1, source: m[2] ? m[2].trim() : "" });
                 }
 
-                let validImages = matchIndices.filter(idx => secImages[idx]);
+                let validImages = matchData.filter(item => secImages[item.idx]);
                 if (validImages.length === 0) return fullMatch;
 
-                // 모바일 반응형 가로 유지를 위해 inline-flex 및 고정 비율 스타일 추가
                 let groupHtml = `<div class="wiki-img-flex-group" style="display: flex; gap: 8px; flex-direction: row; flex-wrap: nowrap; margin: 10px 0; width: 100%; box-sizing: border-box; justify-content: center;">`;
-                validImages.forEach(idx => {
-                    usedImageIndices.add(idx);
-                    groupHtml += `<div style="border: 1px solid #ccc; padding: 4px; background: #fff; flex: 1; max-width: calc(100% / ${validImages.length}); text-align: center; border-radius: 8px; box-sizing: border-box; overflow: hidden;"><img src="${secImages[idx]}" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 4px;"></div>`;
+                validImages.forEach(item => {
+                    usedImageIndices.add(item.idx);
+                    groupHtml += `
+                    <div style="border: 1px solid #ccc; padding: 4px; background: #fff; flex: 1; max-width: calc(100% / ${validImages.length}); text-align: center; border-radius: 8px; box-sizing: border-box; overflow: hidden;">
+                        <img src="${secImages[item.idx]}" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 4px;">
+                        ${item.source ? `<div style="font-size: 11px; color: #888; margin-top: 4px; text-align: center; word-break: break-all;">ⓒ ${item.source}</div>` : ''}
+                    </div>`;
                 });
                 groupHtml += `</div>`;
                 return groupHtml;
             });
 
-            // 단독 사진 변환
-            html = html.replace(/\[사진:(\d+)\]/g, function(match, indexStr) {
+            // 단독 사진 및 출처 변환 정규식 개조
+            html = html.replace(/\[사진:(\d+)(?:\|([^\]]+))?\]/g, function(match, indexStr, sourceText) {
                 let idx = parseInt(indexStr) - 1;
+                let source = sourceText ? sourceText.trim() : "";
                 if(secImages[idx]) {
                     if (usedImageIndices.has(idx)) return ''; 
                     usedImageIndices.add(idx);
-                    return `<div style="border: 1px solid #ccc; padding: 5px; background: #fff; margin: 10px 0; max-width: 100%; text-align: center; border-radius: 8px; box-sizing: border-box;"><img src="${secImages[idx]}" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 4px;"></div>`;
+                    return `
+                    <div style="border: 1px solid #ccc; padding: 5px; background: #fff; margin: 10px 0; max-width: 100%; text-align: center; border-radius: 8px; box-sizing: border-box;">
+                        <img src="${secImages[idx]}" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 4px;">
+                        ${source ? `<div style="font-size: 11px; color: #888; margin-top: 4px; text-align: center; word-break: break-all;">ⓒ ${source}</div>` : ''}
+                    </div>`;
                 }
                 return `[사진:${indexStr} 없음]`;
             });
@@ -438,7 +447,6 @@
             </details>`;
         }
 
-        // 🌟 🌟 🌟 폰/태블릿을 위한 완벽 반응형 미디어 쿼리 CSS 탑재 🌟 🌟 🌟
         const finalHtml = `
 <style>
     .footnote-container { display: inline-block; position: relative; cursor: pointer; }
@@ -468,7 +476,6 @@
     details.wiki-section:not([open]) summary h2 .toggle-text-wrap::after { content: '[펼치기]'; font-size: 0.5em; font-weight: normal; color: #0275d8; margin-left: auto; }
     details.wiki-section[open] summary h2 .toggle-text-wrap::after { content: '[접기]'; font-size: 0.5em; font-weight: normal; color: #0275d8; margin-left: auto; }
 
-    /* 모바일 가동 시 글씨 및 레이아웃 브레이킹 방지 반응형 미디어 쿼리 */
     @media screen and (max-width: 600px) {
         .wiki-main-container { width: 100% !important; padding: 0 5px !important; }
         .wiki-main-title { font-size: 1.7em !important; }
@@ -547,15 +554,15 @@
     function copyHTML() {
         const finalHtml = generateFullHTML();
         navigator.clipboard.writeText(finalHtml).then(() => {
-            alert("복사되었습니다!\n티스토리 기본모드를 'HTML'로 변경하고 붙여넣기 하세요.");
+            alert("복사되었습니다!\n티스토리 기본모드를 'HTML'로 변경하고 붙여넣기 ( ᴗ ̫ ᴗ ) ");
         }).catch(err => {
-            alert("복사 실패 ㅠ.ㅠ 브라우저 권한을 확인해주세요.");
+            alert("복사 실패 ㅠ.ㅠ 브라우저 권한을 확인해주세요!");
         });
     }
 
     window.onload = function() {
-        addInfoRow("항목명 1", "여기에 프로필 정보를 입력하세요. [각주:각주 예시]");
-        addInfoRow("항목명 2", "항목은 왼쪽 버튼으로 계속 추가 가능합니다.");
+        addInfoRow("항목명 1", "여기에 프로필 정보를 입력하세요 [각주:각주 예시]");
+        addInfoRow("항목명 2", "왼쪽 버튼으로 계속 추가 가능합니다! 제한 X");
 
         const dummy1 = "https://via.placeholder.com/150x150/008275/fff?text=Image+1";
         const dummy2 = "https://via.placeholder.com/150x150/333333/fff?text=Image+2";
@@ -563,19 +570,19 @@
         addSectionUI({ 
             level: 1, 
             title: "1단계 문단 제목", 
-            content: "[사진:1] [인용구:원문 대사 예시|이곳은 번역이나 상세 설명이 들어가는 칸. 출처를 적어도 좋습니다]\n\n여기에 본문 내용을 입력하세요."     
-        }, [dummy1, dummy2]);
+            content: "[사진:1|커미션] [인용구:원문 대사 예시|이곳은 번역이나 상세 설명이 들어가는 칸. 출처를 적어도 좋습니다]\n\n여기에 본문 내용을 입력하세요."     
+        }, [dummy1]);
         
         addSectionUI({     
             level: 2, 
             title: "2단계 하위 문단 제목", 
-            content: "[사진:2][사진:3]\n\n여러장 가로 배열도 가능합니다!" 
+            content: "[사진:1][사진:2|커미션 출처 예시]\n\n여러장 가로 배열 상태에서도 출처가 개별적으로 적용됩니다!" 
         });
     
         addSectionUI({ 
             level: 3, 
             title: "3단계 세부적 문단 제목", 
-            content: "예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 " 
+            content: "예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 " 
         });
         
         updatePreview();
