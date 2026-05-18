@@ -11,7 +11,17 @@
     
     /* 왼쪽 입력 패널 */
     .panel-left { flex: 1; min-width: 340px; background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-height: 90vh; overflow-y: auto; }
-    .panel-right { flex: 1.5; min-width: 340px; background: white; border-radius: 12px; padding: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column; }
+    .panel-right { 
+    flex: 2.2; /* 숫자를 높일수록 미리보기 화면 가로 비율이 더 커져! */
+    min-width: 380px; /* 최소 너비를 확보해서 모바일 뷰가 너무 찌그러지지 않게 방지 */
+    background: white; 
+    border-radius: 12px; 
+    padding: 0; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+}
     
     h2.title-h2 { color: #008275; margin-top: 0; font-weight: 900; text-align: center; margin-bottom: 25px; }
     .section-head { font-size: 15px; font-weight: bold; border-bottom: 2px solid #333; padding-bottom: 5px; margin: 25px 0 10px 0; }
