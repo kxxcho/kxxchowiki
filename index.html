@@ -45,14 +45,21 @@
     .img-manage-item { display: flex; align-items: center; gap: 10px; background: #f1f3f5; padding: 6px; border-radius: 4px; margin-bottom: 6px; font-size: 12px; }
     .img-manage-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
 
-    /* 🌟 시작 설명 팝업 모달 스타일 */
-    .welcome-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 99999; }
-    .welcome-modal { background: white; padding: 30px; border-radius: 16px; width: 480px; max-width: 90vw; box-shadow: 0 10px 30px rgba(0,0,0,0.15); animation: modalFadeIn 0.3s ease; }
-    .welcome-title { font-size: 20px; font-weight: 900; color: #008275; text-align: center; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .welcome-content { font-size: 13px; line-height: 1.6; color: #444; margin-bottom: 20px; text-align: justify; }    
+    /* 🌟 시작 설명 팝업 모달 스타일 (모달이 화면을 벗어나지 않도록 보완!) */
+    .welcome-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 99999; padding: 15px; box-sizing: border-box; }
+    .welcome-modal { 
+        background: white; padding: 25px; border-radius: 16px; width: 480px; max-width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.15); animation: modalFadeIn 0.3s ease; 
+        display: flex; flex-direction: column; max-height: 85vh; /* 👈 모바일 화면 높이에 맞춰 최대 크기 제한 */
+    }
+    .welcome-title { font-size: 20px; font-weight: 900; color: #008275; text-align: center; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; flex-shrink: 0; }
+    .welcome-content { 
+        font-size: 13px; line-height: 1.6; color: #444; margin-bottom: 15px; text-align: justify; 
+        overflow-y: auto; /* 👈 글씨가 길어지면 모바일에서 내부 스크롤이 생기도록 보완! */
+        padding-right: 5px;
+    }    
     .welcome-content ul { padding-left: 20px; margin: 8px 0; }
     .welcome-content li { margin-bottom: 6px; }
-    .btn-modal-close { background: #008275; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; }
+    .btn-modal-close { background: #008275; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; flex-shrink: 0; }
     .btn-modal-close:hover { background: #00665c; }
     @keyframes modalFadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 </style>
