@@ -45,16 +45,16 @@
     .img-manage-item { display: flex; align-items: center; gap: 10px; background: #f1f3f5; padding: 6px; border-radius: 4px; margin-bottom: 6px; font-size: 12px; }
     .img-manage-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
 
-    /* 🌟 시작 설명 팝업 모달 스타일 (모달이 화면을 벗어나지 않도록 보완!) */
+    /* 시작 설명 팝업 모달 스타일 */
     .welcome-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 99999; padding: 15px; box-sizing: border-box; }
     .welcome-modal { 
         background: white; padding: 25px; border-radius: 16px; width: 480px; max-width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.15); animation: modalFadeIn 0.3s ease; 
-        display: flex; flex-direction: column; max-height: 85vh; /* 👈 모바일 화면 높이에 맞춰 최대 크기 제한 */
+        display: flex; flex-direction: column; max-height: 85vh; 
     }
     .welcome-title { font-size: 20px; font-weight: 900; color: #008275; text-align: center; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; flex-shrink: 0; }
     .welcome-content { 
         font-size: 13px; line-height: 1.6; color: #444; margin-bottom: 15px; text-align: justify; 
-        overflow-y: auto; /* 👈 글씨가 길어지면 모바일에서 내부 스크롤이 생기도록 보완! */
+        overflow-y: auto; 
         padding-right: 5px;
     }    
     .welcome-content ul { padding-left: 20px; margin: 8px 0; }
@@ -62,6 +62,13 @@
     .btn-modal-close { background: #008275; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; flex-shrink: 0; }
     .btn-modal-close:hover { background: #00665c; }
     @keyframes modalFadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* 🌟 모바일 반응형일 때 에디터 가이드 팝업창 글씨체 조절 구역 */
+    @media screen and (max-width: 600px) {
+        .welcome-title { font-size: 17px !important; }
+        .welcome-content { font-size: 11.5px !important; line-height: 1.5 !important; }
+        .welcome-modal { padding: 18px !important; }
+    }
 </style>
 </head>
 <body>
@@ -465,7 +472,7 @@
                             <span class="toggle-text-wrap" style="flex: 1; display: flex; justify-content: space-between; align-items: center;"><span>${sec.title}</span></span>
                         </h2>
                     </summary>
-                    <div style="padding: 10px 0; background-color: transparent; line-height: 1.6; word-break: break-all;">
+                    <div class="wiki-body-content-text" style="padding: 10px 0; background-color: transparent; line-height: 1.6; word-break: break-all;">
                         ${parsedContent}
                         ${remainingImagesHtml}
                     </div>
@@ -493,6 +500,7 @@
             </details>`;
         }
 
+        // 🌟 🌟 🌟 모바일 반응형 시 본문 글씨 축소 및 모든 문단 제목 크기 통일 미디어 쿼리 🌟 🌟 🌟
         const finalHtml = `
 <style>
     .footnote-container { display: inline-block; position: relative; cursor: pointer; }
@@ -522,12 +530,19 @@
     details.wiki-section:not([open]) summary h2 .toggle-text-wrap::after { content: '[펼치기]'; font-size: 0.5em; font-weight: normal; color: #0275d8; margin-left: auto; }
     details.wiki-section[open] summary h2 .toggle-text-wrap::after { content: '[접기]'; font-size: 0.5em; font-weight: normal; color: #0275d8; margin-left: auto; }
 
+    /* 모바일 가동 시 글씨 비율 최적화 */
     @media screen and (max-width: 600px) {
         .wiki-main-container { width: 100% !important; padding: 0 5px !important; }
         .wiki-main-title { font-size: 1.7em !important; }
-        .wiki-section summary h2 { font-size: 1.15em !important; }
-        .wiki-section summary h2.wiki-heading-2 { font-size: 1.05em !important; }
-        .wiki-section summary h2.wiki-heading-3 { font-size: 1em !important; }
+        
+        /* 💥 모바일에서 모든 문단 제목(1,2,3단계) 크기를 똑같이 통일! 💥 */
+        .wiki-section summary h2, 
+        .wiki-section summary h2.wiki-heading-2, 
+        .wiki-section summary h2.wiki-heading-3 { font-size: 1.05em !important; }
+        
+        /* 💥 모바일에서 위키 내 본문 텍스트가 너무 둔탁하게 크지 않도록 최적화 💥 */
+        .wiki-body-content-text { font-size: 13px !important; line-height: 1.55 !important; }
+
         .wiki-img-flex-group { gap: 4px !important; }
         .wiki-img-flex-group div { border-radius: 4px !important; padding: 2px !important; min-width: 60px !important; }
     }
