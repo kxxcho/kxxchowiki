@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>나무위키 메이커</title>
+<title>KXXCHOWIKI</title>
 
 <style>
     body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background-color: #f4f6f8; display: flex; justify-content: center; padding: 20px; color: #333; margin: 0; }
@@ -61,7 +61,7 @@
 
         <div class="input-grp"> 
             <label>분류 설정 (분류 이름 | 이동할 링크 URL) 한 줄에 하나씩</label> 
-            <textarea id="in-category" style="height: 60px;" oninput="updatePreview()" placeholder="ex) 사카모토 데이즈 | https://tistory.com/1">장르 | https://example.com&#13;&#10;등장인물 | https://example.com</textarea> 
+            <textarea id="in-category" style="height: 60px;" oninput="updatePreview()" placeholder="ex) 사카모토 데이즈 | https://tistory.com/1">사카모토 데이즈 | https://example.com&#13;&#10;등장인물 | https://example.com</textarea> 
         </div>
         
         <div class="input-grp" style="display: flex; align-items: center; gap: 8px; background: #fff3cd; padding: 10px; border-radius: 6px;">
@@ -80,7 +80,7 @@
             
             <div class="input-grp" style="display: flex; align-items: center; gap: 8px; background: #e0f2f1; padding: 10px; border-radius: 6px; margin-bottom: 10px;">
                 <input type="checkbox" id="in-show-extra" onchange="updatePreview()" style="width: auto; margin: 0;">
-                <label style="margin: 0; color: #004d40; font-weight: bold;">▼ 표 맨 아래 '기타 정보' 박스 표시하기</label>
+                <label style="margin: 0; color: #004d40; font-weight: bold;">▼ 표 맨 아래 기타 정보 박스 표시하기</label>
             </div>
             <div id="extra-settings-zone" style="background: #fff; border: 1px solid #ccc; padding: 10px; border-radius: 6px; margin-bottom: 15px; display: none;">
                 <div class="input-grp">
@@ -108,10 +108,10 @@
 
         <div class="section-head">3. 본문 작성 (목차 및 내용)</div>
         <div style="font-size: 12px; color: #666; margin-bottom: 10px; line-height: 1.5; background: #e8f5e9; padding: 10px; border-radius: 6px;">
-            🔥 <b>본문 특수 태그 가이드</b><br>
+             <b>본문 특수 태그 가이드</b><br>
             - 각주: <code>[각주:설명내용]</code><br>
             - 인용구: <code>[인용구:원문대사|번역설명]</code><br>
-            - 🌟 <b>원하는 위치 가로 배열 사진</b>: 아래 사진 추가기에서 등록한 순서대로 본문 원하는 자리에 <code>[사진:1][사진:2]</code> 처럼 붙여 써보세요!
+            - <b>원하는 위치 가로 배열 사진</b>: 아래 사진 추가기에서 등록한 순서대로 본문 원하는 자리에 <code>[사진:1][사진:2]</code> 처럼 붙여 쓰기
         </div>
         
         <div id="sections-container"></div>
@@ -126,7 +126,7 @@
         
         <div id="preview-area"></div>
 
-        <button class="btn-copy" onclick="copyHTML()">📋 전체 HTML 코드 복사하기</button>
+        <button class="btn-copy" onclick="copyHTML()">전체 HTML 코드 복사하기</button>
     </div>
 </div>
 
@@ -155,7 +155,7 @@
         }
     }
 
-    let sectionImagesStorage = {}; // 문단ID별 이미지 base64 배열 보관소
+    let sectionImagesStorage = {}; 
 
     function triggerSecImageUpload(secId) {
         const fileInput = document.getElementById('file-input-' + secId);
@@ -331,10 +331,11 @@
                 let validImages = matchIndices.filter(idx => secImages[idx]);
                 if (validImages.length === 0) return fullMatch;
 
-                let groupHtml = `<div class="wiki-img-flex-group" style="display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; width: 100%; box-sizing: border-box;">`;
+                // 모바일 반응형 가로 유지를 위해 inline-flex 및 고정 비율 스타일 추가
+                let groupHtml = `<div class="wiki-img-flex-group" style="display: flex; gap: 8px; flex-direction: row; flex-wrap: nowrap; margin: 10px 0; width: 100%; box-sizing: border-box; justify-content: center;">`;
                 validImages.forEach(idx => {
                     usedImageIndices.add(idx);
-                    groupHtml += `<div style="border: 1px solid #ccc; padding: 5px; background: #fff; flex: 1; min-width: 150px; text-align: center; border-radius: 8px; box-sizing: border-box;"><img src="${secImages[idx]}" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 4px;"></div>`;
+                    groupHtml += `<div style="border: 1px solid #ccc; padding: 4px; background: #fff; flex: 1; max-width: calc(100% / ${validImages.length}); text-align: center; border-radius: 8px; box-sizing: border-box; overflow: hidden;"><img src="${secImages[idx]}" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 4px;"></div>`;
                 });
                 groupHtml += `</div>`;
                 return groupHtml;
@@ -377,17 +378,15 @@
             let remainingImagesHtml = '';
             let remainingImgs = sec.images.filter((img, idx) => !textResult.usedIndices.has(idx));
             if(remainingImgs.length > 0) {
-                remainingImagesHtml = `<div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">`;
+                remainingImagesHtml = `<div style="display: flex; gap: 8px; flex-direction: row; flex-wrap: nowrap; margin-top: 15px; width:100%; justify-content: center;">`;
                 remainingImgs.forEach(img => {
-                    remainingImagesHtml += `<div style="border: 1px solid #ccc; padding: 5px; background: #fff; flex: 1; min-width: 150px; text-align: center; border-radius: 8px;"><img src="${img}" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 4px;"></div>`;
+                    remainingImagesHtml += `<div style="border: 1px solid #ccc; padding: 4px; background: #fff; flex: 1; max-width: calc(100% / ${remainingImgs.length}); text-align: center; border-radius: 8px;"><img src="${img}" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 4px;"></div>`;
                 });
                 remainingImagesHtml += `</div>`;
             }
 
             let indentStyle = sec.level > 1 ? `padding-left: ${(sec.level - 1) * 12}px;` : '';
             
-            // 🌟 🌟 🌟 3단계 하위 문단 제목 크기 황금 밸런스 조정 부분 🌟 🌟 🌟
-            // 1단계=1.4em / 2단계=1.2em / 3단계=1.15em 으로 2단계보다 '아주 약간만' 작게 최적화!
             let fontSize = '1.4em';
             if (sec.level === 2) fontSize = '1.2em';
             if (sec.level === 3) fontSize = '1.15em'; 
@@ -396,7 +395,7 @@
             <div style="margin-top: 25px; width: 100%; box-sizing: border-box; ${indentStyle}">
                 <details open class="wiki-section">
                     <summary style="list-style: none; outline: none; cursor: pointer; display: block; border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-bottom: 10px;">
-                        <h2 id="${secId}" style="font-size: ${fontSize}; font-weight: bold; margin: 0; display: flex; align-items: center; width: 100%;">
+                        <h2 id="${secId}" class="wiki-heading-${sec.level}" style="font-size: ${fontSize}; font-weight: bold; margin: 0; display: flex; align-items: center; width: 100%;">
                             <a href="#toc-top" style="color: #0275d8; text-decoration: none; margin-right: 6px; flex-shrink: 0;">${numStr}.</a> 
                             <span class="toggle-text-wrap" style="flex: 1; display: flex; justify-content: space-between; align-items: center;"><span>${sec.title}</span></span>
                         </h2>
@@ -429,6 +428,7 @@
             </details>`;
         }
 
+        // 🌟 🌟 🌟 폰/태블릿을 위한 완벽 반응형 미디어 쿼리 CSS 탑재 🌟 🌟 🌟
         const finalHtml = `
 <style>
     .footnote-container { display: inline-block; position: relative; cursor: pointer; }
@@ -457,11 +457,22 @@
     
     details.wiki-section:not([open]) summary h2 .toggle-text-wrap::after { content: '[펼치기]'; font-size: 0.5em; font-weight: normal; color: #0275d8; margin-left: auto; }
     details.wiki-section[open] summary h2 .toggle-text-wrap::after { content: '[접기]'; font-size: 0.5em; font-weight: normal; color: #0275d8; margin-left: auto; }
+
+    /* 모바일 가동 시 글씨 및 레이아웃 브레이킹 방지 반응형 미디어 쿼리 */
+    @media screen and (max-width: 600px) {
+        .wiki-main-container { width: 100% !important; padding: 0 5px !important; }
+        .wiki-main-title { font-size: 1.7em !important; }
+        .wiki-section summary h2 { font-size: 1.15em !important; }
+        .wiki-section summary h2.wiki-heading-2 { font-size: 1.05em !important; }
+        .wiki-section summary h2.wiki-heading-3 { font-size: 1em !important; }
+        .wiki-img-flex-group { gap: 4px !important; }
+        .wiki-img-flex-group div { border-radius: 4px !important; padding: 2px !important; min-width: 60px !important; }
+    }
 </style>
 
-<div style="font-family: sans-serif; color: #373a3c; width: 95%; max-width: 720px; margin: 0 auto; line-height: 1.4; box-sizing: border-box;">
+<div class="wiki-main-container" style="font-family: sans-serif; color: #373a3c; width: 95%; max-width: 720px; margin: 0 auto; line-height: 1.4; box-sizing: border-box;">
 
-    <h1 style="font-size: 2.2em; border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-bottom: 5px; font-weight: bold; letter-spacing: -1px; word-break: keep-all;">${title}</h1>
+    <h1 class="wiki-main-title" style="font-size: 2.2em; border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-bottom: 5px; font-weight: bold; letter-spacing: -1px; word-break: keep-all;">${title}</h1>
     <div style="text-align: right; font-size: 0.8em; color: #666; margin-bottom: 10px;">최근 수정 시각: ${editTime}</div>
 
     <div style="border: 1px solid #ccc; padding: 5px 10px; background-color: #fff; margin-bottom: 20px; font-size: 0.9em; word-break: break-all;">
@@ -526,9 +537,9 @@
     function copyHTML() {
         const finalHtml = generateFullHTML();
         navigator.clipboard.writeText(finalHtml).then(() => {
-            alert("✅ 완벽하게 복사되었습니다!\n티스토리 기본모드를 'HTML'로 변경하고 붙여넣기 하세요.");
+            alert("복사되었습니다!\n티스토리 기본모드를 'HTML'로 변경하고 붙여넣기 하세요.");
         }).catch(err => {
-            alert("복사 실패 ㅠㅠ 브라우저 권한을 확인해주세요.");
+            alert("복사 실패 ㅠ.ㅠ 브라우저 권한을 확인해주세요.");
         });
     }
 
