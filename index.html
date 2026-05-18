@@ -6,22 +6,22 @@
 <title>KXXCHOWIKI</title>
 
 <style>
-    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background-color: #f4f6f8; display: flex; justify-content: center; padding: 20px; color: #333; margin: 0; }
+    body { font-family: 'Pretendard'; background-color: #f4f6f8; display: flex; justify-content: center; padding: 20px; color: #333; margin: 0; }
     .maker-wrap { display: flex; gap: 20px; width: 100%; max-width: 1400px; flex-wrap: wrap; align-items: flex-start; }
     
     /* 왼쪽 입력 패널 */
     .panel-left { flex: 1; min-width: 340px; background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-height: 90vh; overflow-y: auto; }
     .panel-right { 
-    flex: 2.2; /* 숫자를 높일수록 미리보기 화면 가로 비율이 더 커져! */
-    min-width: 380px; /* 최소 너비를 확보해서 모바일 뷰가 너무 찌그러지지 않게 방지 */
-    background: white; 
-    border-radius: 12px; 
-    padding: 0; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-    overflow: hidden; 
-    display: flex; 
-    flex-direction: column; 
-}
+        flex: 2.2; /* 숫자를 높일수록 미리보기 화면 가로 비율이 더 커져! */
+        min-width: 380px; /* 최소 너비를 확보해서 모바일 뷰가 너무 찌그러지지 않게 방지 */
+        background: white; 
+        border-radius: 12px; 
+        padding: 0; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+        overflow: hidden; 
+        display: flex; 
+        flex-direction: column; 
+    }
     
     h2.title-h2 { color: #008275; margin-top: 0; font-weight: 900; text-align: center; margin-bottom: 25px; }
     .section-head { font-size: 15px; font-weight: bold; border-bottom: 2px solid #333; padding-bottom: 5px; margin: 25px 0 10px 0; }
@@ -44,9 +44,43 @@
     .img-manage-list { margin-top: 8px; border: 1px dashed #ccc; padding: 8px; border-radius: 6px; background: #fff; }
     .img-manage-item { display: flex; align-items: center; gap: 10px; background: #f1f3f5; padding: 6px; border-radius: 4px; margin-bottom: 6px; font-size: 12px; }
     .img-manage-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
+
+    /* 🌟 시작 설명 팝업 모달 스타일 */
+    .welcome-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 99999; }
+    .welcome-modal { background: white; padding: 30px; border-radius: 16px; width: 480px; max-width: 90vw; box-shadow: 0 10px 30px rgba(0,0,0,0.15); animation: modalFadeIn 0.3s ease; }
+    .welcome-title { font-size: 20px; font-weight: 900; color: #008275; text-align: center; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .welcome-content { font-size: 13px; line-height: 1.6; color: #444; margin-bottom: 20px; text-align: justify; }    
+    .welcome-content ul { padding-left: 20px; margin: 8px 0; }
+    .welcome-content li { margin-bottom: 6px; }
+    .btn-modal-close { background: #008275; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; }
+    .btn-modal-close:hover { background: #00665c; }
+    @keyframes modalFadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
+
+<div class="welcome-modal-overlay" id="welcomeModal">
+    <div class="welcome-modal">
+        <div class="welcome-title">KXXCHOWIKI 에디터 가이드</div>
+        <div class="welcome-content">
+               
+            그간 티스토리 코드로 배포를 했으나 이래저래 어려움이 많아 가볍게 수정이 가능한 에디터를 새로 제작해보았습니다! ⁃ ⩊ ⁃  최하단 카피라이트 삭제, 에디터 자작 발언 등의 행위는 당연히 금지하고 있습니다 ㅜ.ㅜ  이를 제외한 원본을 훼손하지 않는 선에서 일부 수정은 허용하고 있으며 (추가 표 삽입, 자간 조절 등 문의 없이 코드 수정 사용 가능) 이외 문의는 언제나 <a href="https://asked.kr/kxxchox" target="_blank" style="color: #008275; text-decoration: none;">https://asked.kr/kxxchox </a>를 통해 주시면 빠른 회신 및 업데이트 하도록 하겠습니다!
+<br><br>
+            <span style="color: #888;">에디터 사용 금지 드림) 사카모토 데이즈 ㅡ 나구모 요이치 </span><br><br>
+               만들고 인용으로 자랑해주시면 정말... 좋아합니다<br>
+               매번 인용으로 자랑해주시는 분들께 감사하고 있어요  (⸝⸝๑  ̫ ๑⸝⸝⸝) 
+            <hr style="border:0; border-top:1px solid #eee; margin:12px 0;">
+            <b>특수 태그 사용 안내</b>
+            <ul>
+                <li><b>각주 달기</b>: 문장 뒤에 <code>[각주:설명내용]</code>을 적으면 실시간으로 각주 번호가 부여되며 팝업 및 하단 목록이 자동 생성됩니다.</li>
+                <li><b>인용구 틀</b>: 대사나 강조 구절은 <code>[인용구:원문대사|번역설명]</code> 태그를 사용해 인용구 틀을 씌울 수 있습니다.</li>
+                <li><b>사진 삽입</b>: 문단 내 사진 업로드 후 원하는 위치에 <code>[사진:1]</code>, <code>[사진:2]</code>를 기입하세요. 공백 없이 붙여 쓰면 <code>[사진:1][사진:2]</code> 가로 배열로 정렬됩니다.</li>
+                <li><b>커미션 출처</b>: 사진 뒤에 파이프 기호를 붙여 <code>[사진:1|출처내용]</code>을 쓰면 사진 밑에 ⓒ 기호와 함께 출처가 표기됩니다.</li>
+            </ul>
+        </div>
+        <button class="btn-modal-close" onclick="closeWelcomeModal()">에디터 시작하기</button>
+    </div>
+</div>
 
 <div class="maker-wrap">
     <div class="panel-left">
@@ -142,6 +176,11 @@
 </div>
 
 <script>
+    // 팝업창 닫기 함수
+    function closeWelcomeModal() {
+        document.getElementById('welcomeModal').style.display = 'none';
+    }
+
     let srcProfileImg = "https://via.placeholder.com/300x380/eee/999?text=Profile+Image";
     let srcExtraImg = ""; 
 
@@ -329,7 +368,7 @@
                 return fnHtml;
             });
 
-            // [사진:1][사진:2|출처] 연속 사용 및 출처 가로 배열 처리 정규식 개조
+            // [사진:1][사진:2|출처] 연속 사용 및 출처 가로 배열 처리
             let usedImageIndices = new Set();
             html = html.replace(/(?:\[사진:(\d+)(?:\|([^\]]+))?\])+/g, function(fullMatch) {
                 let matchData = [];
@@ -355,7 +394,7 @@
                 return groupHtml;
             });
 
-            // 단독 사진 및 출처 변환 정규식 개조
+            // 단독 사진 및 출처 변환
             html = html.replace(/\[사진:(\d+)(?:\|([^\]]+))?\]/g, function(match, indexStr, sourceText) {
                 let idx = parseInt(indexStr) - 1;
                 let source = sourceText ? sourceText.trim() : "";
@@ -541,6 +580,10 @@
         <ul style="list-style: none; padding: 0; font-size: 0.85em; line-height: 1.8; color: #555;">
             ${bottomFootnotesHtml}
         </ul>
+    </div>
+
+    <div style="margin-top: 50px; text-align: center; font-size: 11px; color: #aaa; font-family: sans-serif; line-height: 1.5; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;" oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
+        ⓒ 2026. kxxcho. All rights reserved.
     </div>
 </div>
 `;
