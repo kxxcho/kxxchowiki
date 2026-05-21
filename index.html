@@ -4,24 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KXXCHOWIKI</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-    body { font-family: 'Pretendard'; background-color: #f4f6f8; display: flex; justify-content: center; padding: 20px; color: #333; margin: 0; }
+    body { font-family: 'Pretendard', sans-serif; background-color: #f4f6f8; display: flex; justify-content: center; padding: 20px; color: #333; margin: 0; }
     .maker-wrap { display: flex; gap: 20px; width: 100%; max-width: 1400px; flex-wrap: wrap; align-items: flex-start; }
     
-    /* 왼쪽 입력 패널 */
     .panel-left { flex: 1; min-width: 340px; background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-height: 90vh; overflow-y: auto; }
-    .panel-right { 
-        flex: 2.2; /* 숫자를 높일수록 미리보기 화면 가로 비율이 더 커져! */
-        min-width: 380px; /* 최소 너비를 확보해서 모바일 뷰가 너무 찌그러지지 않게 방지 */
-        background: white; 
-        border-radius: 12px; 
-        padding: 0; 
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-        overflow: hidden; 
-        display: flex; 
-        flex-direction: column; 
-    }
+    .panel-right { flex: 2.2; min-width: 380px; background: white; border-radius: 12px; padding: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column; }
     
     h2.title-h2 { color: #008275; margin-top: 0; font-weight: 900; text-align: center; margin-bottom: 25px; }
     .section-head { font-size: 15px; font-weight: bold; border-bottom: 2px solid #333; padding-bottom: 5px; margin: 25px 0 10px 0; }
@@ -33,37 +23,28 @@
     
     .btn-add { background: #e0f2f1; color: #008275; border: none; padding: 10px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; display: block; width: 100%; margin-top: 10px; }
     .btn-add:hover { background: #c8e6e5; }
-    .btn-copy { background: #262626; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: calc(100% - 40px); margin: 20px; font-size: 16px; }
+    .btn-copy { background: #262626; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 1; font-size: 15px; transition: 0.2s; }
     .btn-copy:hover { background: #000; }
+    .btn-save-img { background: #008275; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 1; font-size: 15px; transition: 0.2s; }
+    .btn-save-img:hover { background: #00665c; }
 
-    /* 미리보기 패널 헤더 */
     .preview-header { background: #008275; color: white; padding: 12px 20px; font-weight: bold; font-size: 14px; display: flex; justify-content: space-between; }
     #preview-area { padding: 20px; background: #fff; overflow-y: auto; max-height: 80vh; }
 
-    /* 업로드 이미지 리스트 스타일 */
     .img-manage-list { margin-top: 8px; border: 1px dashed #ccc; padding: 8px; border-radius: 6px; background: #fff; }
     .img-manage-item { display: flex; align-items: center; gap: 10px; background: #f1f3f5; padding: 6px; border-radius: 4px; margin-bottom: 6px; font-size: 12px; }
     .img-manage-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
 
-    /* 시작 설명 팝업 모달 스타일 */
     .welcome-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 99999; padding: 15px; box-sizing: border-box; }
-    .welcome-modal { 
-        background: white; padding: 25px; border-radius: 16px; width: 480px; max-width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.15); animation: modalFadeIn 0.3s ease; 
-        display: flex; flex-direction: column; max-height: 85vh; 
-    }
+    .welcome-modal { background: white; padding: 25px; border-radius: 16px; width: 480px; max-width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.15); animation: modalFadeIn 0.3s ease; display: flex; flex-direction: column; max-height: 85vh; }
     .welcome-title { font-size: 20px; font-weight: 900; color: #008275; text-align: center; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; flex-shrink: 0; }
-    .welcome-content { 
-        font-size: 13px; line-height: 1.6; color: #444; margin-bottom: 15px; text-align: justify; 
-        overflow-y: auto; 
-        padding-right: 5px;
-    }    
+    .welcome-content { font-size: 13px; line-height: 1.6; color: #444; margin-bottom: 15px; text-align: justify; overflow-y: auto; padding-right: 5px; }    
     .welcome-content ul { padding-left: 20px; margin: 8px 0; }
     .welcome-content li { margin-bottom: 6px; }
     .btn-modal-close { background: #008275; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; flex-shrink: 0; }
     .btn-modal-close:hover { background: #00665c; }
     @keyframes modalFadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* 🌟 모바일 반응형일 때 에디터 가이드 팝업창 글씨체 조절 구역 */
     @media screen and (max-width: 600px) {
         .welcome-title { font-size: 17px !important; }
         .welcome-content { font-size: 11.5px !important; line-height: 1.5 !important; }
@@ -77,19 +58,20 @@
     <div class="welcome-modal">
         <div class="welcome-title">KXXCHOWIKI 에디터 가이드</div>
         <div class="welcome-content">
-               
-            그간 티스토리 코드로 배포를 했으나 이래저래 어려움이 많아 가볍게 수정이 가능한 에디터를 새로 제작해보았습니다! ⁃ ⩊ ⁃  최하단 카피라이트 삭제, 에디터 자작 발언 등의 행위는 당연히 금지하고 있습니다 ㅜ.ㅜ  이를 제외한 원본을 훼손하지 않는 선에서 일부 수정은 허용하고 있으며 (추가 표 삽입, 자간 조절 등 문의 없이 코드 수정 사용 가능) 이외 문의는 언제나 <a href="https://asked.kr/kxxchox" target="_blank" style="color: #008275; text-decoration: none;">https://asked.kr/kxxchox </a>를 통해 주시면 빠른 회신 및 업데이트 하도록 하겠습니다!
-<br><br>
-            <span style="color: #888;">에디터 사용 금지 드림) 사카모토 데이즈 ㅡ 나구모 요이치 </span><br><br>
-               만들고 인용으로 자랑해주시면 정말... 좋아합니다<br>
-               매번 인용으로 자랑해주시는 분들께 감사하고 있어요  (⸝⸝๑  ̫ ๑⸝⸝⸝) 
+            그간 티스토리 코드로 배포를 했으나 이래저래 어려움이 많아 가볍게 수정이 가능한 에디터를 새로 제작해보았습니다! ⁃ ⩊ ⁃  최하단 카피라이트 삭제, 에디터 자작 발언 등의 행위는 당연히 금지하고 있습니다 ㅜ.ㅜ 
+            <hr style="border:0; border-top:1px solid #eee; margin:12px 0;">
+            <b style="color:#008275;">[NEW] 사진 자유 크기 조절 & 위치 맞춤(크롭) 기능</b>
+            <ul>
+                <li><b>사진 틀 크기 조절</b>: 본문에 삽입된 사진의 <b>우측 하단 모서리를 마우스로 잡아 끌면</b> 마음대로 가로세로 크기를 조절할 수 있습니다.</li>
+                <li><b>사진 이동 & 부분 확대</b>: 삽입된 사진(프로필 포함) 위에서 <b>마우스 휠을 굴리면 확대/축소</b>가 되고, <b>클릭해서 드래그하면 원하는 위치로 이동</b>하여 딱 맞게 크롭 효과를 낼 수 있습니다!</li>
+            </ul>
             <hr style="border:0; border-top:1px solid #eee; margin:12px 0;">
             <b>특수 태그 사용 안내</b>
             <ul>
-                <li><b>각주 달기</b>: 문장 뒤에 <code>[각주:설명내용]</code>을 적으면 실시간으로 각주 번호가 부여되며 팝업 및 하단 목록이 자동 생성됩니다.</li>
-                <li><b>인용구 틀</b>: 대사나 강조 구절은 <code>[인용구:원문대사|번역설명]</code> 태그를 사용해 인용구 틀을 씌울 수 있습니다.</li>
-                <li><b>사진 삽입</b>: 문단 내 사진 업로드 후 원하는 위치에 <code>[사진:1]</code>, <code>[사진:2]</code>를 기입하세요. 공백 없이 붙여 쓰면 <code>[사진:1][사진:2]</code> 가로 배열로 정렬됩니다.</li>
-                <li><b>커미션 출처</b>: 사진 뒤에 파이프 기호를 붙여 <code>[사진:1|출처내용]</code>을 쓰면 사진 밑에 ⓒ 기호와 함께 출처가 표기됩니다.</li>
+                <li><b>각주 달기</b>: <code>[각주:설명내용]</code></li>
+                <li><b>인용구 틀</b>: <code>[인용구:원문대사|번역설명]</code></li>
+                <li><b>사진 삽입</b>: <code>[사진:1]</code>, <code>[사진:2]</code> 붙여쓰면 가로 배열!</li>
+                <li><b>출처 표기</b>: <code>[사진:1|출처내용]</code></li>
             </ul>
         </div>
         <button class="btn-modal-close" onclick="closeWelcomeModal()">에디터 시작하기</button>
@@ -106,9 +88,13 @@
                 <label>문서 제목</label>
                 <input type="text" id="in-title" value="문서 제목을 입력하세요" oninput="updatePreview()">
             </div>
-            <div style="width: 80px;">
+            <div style="width: 70px;">
                 <label>테마 색상</label>
                 <input type="color" id="in-color" value="#008275" style="height: 40px; padding: 0; border: none; cursor: pointer;" oninput="updatePreview()">
+            </div>
+            <div style="width: 70px;">
+                <label>표 글씨색</label>
+                <input type="color" id="in-text-color" value="#ffffff" style="height: 40px; padding: 0; border: none; cursor: pointer;" oninput="updatePreview()">
             </div>
         </div>
         
@@ -119,7 +105,7 @@
 
         <div class="input-grp"> 
             <label>분류 설정 (분류 이름 | 이동할 링크 URL) 한 줄에 하나씩</label> 
-            <textarea id="in-category" style="height: 60px;" oninput="updatePreview()" placeholder="ex) 장르명 | https://tistory.com/1">장르명 | https://example.com&#13;&#10;등장인물 | https://example.com</textarea> 
+            <textarea id="in-category" style="height: 60px;" oninput="updatePreview()">장르명 | https://example.com&#13;&#10;등장인물 | https://example.com</textarea> 
         </div>
         
         <div class="input-grp" style="display: flex; align-items: center; gap: 8px; background: #def1e4; padding: 10px; border-radius: 6px;">
@@ -130,9 +116,9 @@
         <div class="section-head">2. 프로필 표 (인포박스)</div>
         <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
             <div class="input-grp"> <label>표 상단 이름</label> <input type="text" id="in-info-title" value="캐릭터 이름" oninput="updatePreview()"> </div>
-            <div class="input-grp"> <label>표 상단 부제목 (한자, 영문 등)</label> <input type="text" id="in-info-sub" value="영문명 또는 부제목을 입력하세요" oninput="updatePreview()"> </div>
+            <div class="input-grp"> <label>표 상단 부제목</label> <input type="text" id="in-info-sub" value="영문명 또는 부제목을 입력하세요" oninput="updatePreview()"> </div>
             <div class="input-grp"> 
-                <label>프로필 사진 (파일 선택)</label> 
+                <label>프로필 사진 (마우스 드래그/휠로 비율 맞춤 가능)</label> 
                 <input type="file" id="in-info-img-file" accept="image/*" onchange="handleProfileImage(this)" style="background: #fff;"> 
             </div>
             
@@ -147,30 +133,27 @@
                 </div>
                 <div class="input-grp">
                     <label>기타 정보 글씨 내용</label>
-                    <textarea id="in-extra-text" oninput="updatePreview()" placeholder="내용을 입력하세요.">여기에 내용을 입력하세요.</textarea>
+                    <textarea id="in-extra-text" oninput="updatePreview()">여기에 내용을 입력하세요.</textarea>
                 </div>
                 <div class="input-grp">
-                    <label>기타 정보 삽입 사진 (선택)</label>
+                    <label>기타 정보 삽입 사진 (마우스 조절 가능)</label>
                     <input type="file" id="in-extra-img-file" accept="image/*" onchange="handleExtraImage(this)" style="background: #fff;">
                 </div>
             </div>
 
             <div class="input-grp">
                 <label>표 내용 (항목과 내용)</label>
-                <div style="font-size: 11px; color: #888; margin-bottom: 8px;">각주 사용 가능: [각주:내용]</div>
-                <div id="info-rows-container">
-                    </div>
+                <div id="info-rows-container"></div>
                 <button type="button" class="btn-add" onclick="addInfoRow()">+ 항목 한 줄 추가</button>
             </div>
         </div>
 
         <div class="section-head">3. 본문 작성 (목차 및 내용)</div>
         <div style="font-size: 12px; color: #666; margin-bottom: 10px; line-height: 1.5; background: #e8f5e9; padding: 10px; border-radius: 6px;">
-             <b>본문 특수 태그 가이드</b><br>
+            <b>본문 특수 태그 가이드</b><br>
             ➀ 각주: <code>[각주:설명내용]</code><br>
             ➁ 인용구: <code>[인용구:원문대사|번역설명]</code><br>
-            ➂ 원하는 위치 가로 배열 사진: 등록한 순서대로 본문 원하는 자리에 <code>[사진:1][사진:2]</code> 처럼 붙여 쓰기<br>
-            ➃ 사진 밑 커미션 출처 삽입: 태그 뒤에 파이프 기호를 쓰고 출처 기입 ⁃ ⩊ ⁃  예) <code>[사진:1|커미션 출처]</code>
+            ➂ 사진: <code>[사진:1|커미션 출처]</code> (우측 미리보기 화면에서 모서리를 잡아 크기를 조절하거나, 안에서 휠/드래그로 크롭 가능!)
         </div>
         
         <div id="sections-container"></div>
@@ -180,29 +163,41 @@
 
     <div class="panel-right">
         <div class="preview-header">
-            <span>실시간 미리보기</span>
+            <span>실시간 미리보기 ⁃ ⩊ ⁃ </span>
         </div>
         
         <div id="preview-area"></div>
 
-        <button class="btn-copy" onclick="copyHTML()">전체 HTML 코드 복사하기</button>
+        <div style="display: flex; gap: 15px; padding: 20px; background: #f9f9f9; border-top: 1px solid #eee;">
+            <button class="btn-copy" onclick="copyHTML()">HTML 코드 복사하기</button>
+            <button class="btn-save-img" onclick="saveAsImage()">이미지로 저장하기</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // 팝업창 닫기 함수
     function closeWelcomeModal() {
         document.getElementById('welcomeModal').style.display = 'none';
     }
 
+    // --- 확대/이동 상태 저장 변수들 ---
     let srcProfileImg = "https://via.placeholder.com/300x380/eee/999?text=Profile+Image";
+    let profileTransform = { x: 0, y: 0, scale: 1 };
+    
     let srcExtraImg = ""; 
+    let extraTransform = { x: 0, y: 0, scale: 1 };
+
+    let sectionImagesStorage = {}; 
 
     function handleProfileImage(input) {
         const file = input.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) { srcProfileImg = e.target.result; updatePreview(); };
+            reader.onload = function(e) { 
+                srcProfileImg = e.target.result; 
+                profileTransform = { x: 0, y: 0, scale: 1 }; // 새 이미지면 위치 리셋
+                updatePreview(); 
+            };
             reader.readAsDataURL(file);
         }
     }
@@ -211,7 +206,11 @@
         const file = input.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) { srcExtraImg = e.target.result; updatePreview(); };
+            reader.onload = function(e) { 
+                srcExtraImg = e.target.result; 
+                extraTransform = { x: 0, y: 0, scale: 1 };
+                updatePreview(); 
+            };
             reader.readAsDataURL(file);
         } else {
             srcExtraImg = "";
@@ -219,11 +218,8 @@
         }
     }
 
-    let sectionImagesStorage = {}; 
-
     function triggerSecImageUpload(secId) {
-        const fileInput = document.getElementById('file-input-' + secId);
-        fileInput.click();
+        document.getElementById('file-input-' + secId).click();
     }
 
     function handleSecImageFiles(input, secId) {
@@ -235,7 +231,10 @@
         Array.from(files).forEach(file => {
             const reader = new FileReader();
             reader.onload = e => {
-                sectionImagesStorage[secId].push(e.target.result); 
+                sectionImagesStorage[secId].push({
+                    src: e.target.result,
+                    w: '100%', h: 'auto', x: 0, y: 0, scale: 1 // 개별 이미지의 크기 및 위치 정보 보관
+                }); 
                 processed++;
                 if (processed === files.length) {
                     input.value = ""; 
@@ -259,17 +258,16 @@
         const container = document.getElementById('img-list-' + secId);
         container.innerHTML = '';
         const imgs = sectionImagesStorage[secId] || [];
-
         if (imgs.length === 0) {
             container.innerHTML = '<div style="color:#aaa; font-size:11px; text-align:center; padding:5px;">등록된 본문 사진이 없습니다.</div>';
             return;
         }
-
-        imgs.forEach((imgData, idx) => {
+        imgs.forEach((imgObj, idx) => {
+            const src = typeof imgObj === 'string' ? imgObj : imgObj.src;
             const item = document.createElement('div');
             item.className = 'img-manage-item';
             item.innerHTML = `
-                <img src="${imgData}">
+                <img src="${src}">
                 <span style="flex:1; font-weight:bold; color:#008275;">[사진:${idx + 1}] 태그 매칭</span>
                 <button type="button" onclick="removeSecImage('${secId}', ${idx})" style="background:#ff4d4f; color:white; border:none; padding:3px 6px; border-radius:3px; cursor:pointer; font-weight:bold;">지우기</button>
             `;
@@ -291,7 +289,13 @@
 
     function addSectionUI(sec = {level: 1, title: "", content: ""}, initialImgs = []) {
         const id = 'sec-' + Date.now() + Math.floor(Math.random() * 1000);
-        sectionImagesStorage[id] = initialImgs; 
+        
+        // 초기 더미데이터 호환용
+        const initialImgsObj = initialImgs.map(img => {
+            if (typeof img === 'string') return { src: img, w: '100%', h: 'auto', x: 0, y: 0, scale: 1 };
+            return img;
+        });
+        sectionImagesStorage[id] = initialImgsObj; 
 
         const html = `
             <div class="section-block" id="${id}" style="background: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
@@ -306,7 +310,6 @@
                 </div>
                 <textarea class="sec-content" oninput="updatePreview()" placeholder="문단 내용 입력. [각주:내용], [인용구:내용], [사진:1] 사용 가능" style="width: 100%; height: 80px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px; resize: vertical; box-sizing: border-box;">${sec.content}</textarea>
                 
-                <label style="font-size: 11px; font-weight: bold; color: #555; display: block; margin-bottom: 2px;">본문 사진 관리 (누적 등록 가능)</label>
                 <input type="file" multiple accept="image/*" id="file-input-${id}" onchange="handleSecImageFiles(this, '${id}')" style="display:none;">
                 <button type="button" class="btn-add" onclick="triggerSecImageUpload('${id}')" style="margin: 0; padding: 6px 12px; background: #fff; border: 1px solid #008275; width: auto; font-size: 12px;">+ 사진 추가하기 (기존 사진 유지됨)</button>
                 <div class="img-manage-list" id="img-list-${id}"></div>
@@ -320,6 +323,7 @@
     function generateFullHTML() {
         const title = document.getElementById('in-title').value;
         const color = document.getElementById('in-color').value;
+        const textColor = document.getElementById('in-text-color').value; 
         const editTime = document.getElementById('in-edit-time').value;
         const rawCategory = document.getElementById('in-category').value;
         const spoiler = document.getElementById('in-spoiler').checked;
@@ -329,14 +333,12 @@
         const showExtra = document.getElementById('in-show-extra').checked;
         document.getElementById('extra-settings-zone').style.display = showExtra ? 'block' : 'none';
 
-        // 분류 파싱
         const catLines = rawCategory.split('\n').map(l => l.trim()).filter(l => l.includes('|'));
         const categoryHtml = catLines.map(line => {
             let parts = line.split('|');
             return `<a href="${parts.slice(1).join('|').trim()}" target="_blank" style="color: #0275d8; text-decoration: none;">${parts[0].trim()}</a>`;
         }).join(' <span style="color: #333; font-weight: normal; margin: 0 4px;">|</span> ');
 
-        // 인포박스 내용 수집
         let infoRows = [];
         document.querySelectorAll('.info-row-item').forEach(row => {
             const k = row.querySelector('.info-k').value;
@@ -344,11 +346,11 @@
             if (k || v) infoRows.push({ k, v });
         });
 
-        // 문단 내용 수집
         let sections = [];
         document.querySelectorAll('.section-block').forEach(block => {
             const id = block.id;
             sections.push({
+                id: id,
                 level: parseInt(block.querySelector('.sec-level').value),
                 title: block.querySelector('.sec-title').value,
                 content: block.querySelector('.sec-content').value,
@@ -359,10 +361,9 @@
         let fnIndex = 1;
         let footnotesList = [];
 
-        function parseText(text, secImages = []) {
+        function parseText(text, secImages = [], secId = '') {
             let html = text.replace(/\n/g, '<br>');
             
-            // 인용구 변환
             html = html.replace(/\[인용구:([^\]|]+)(?:\|([^\]]+))?\]/g, function(match, mainText, subText) {
                 let qHtml = `<div style="border-left: 3px solid ${color}; background-color: #f9f9f9; padding: 10px 15px; margin-bottom: 6px; font-family: 'Noto Sans JP', 'Pretendard', sans-serif; font-size: 0.85em; width: auto; max-width: 100%; box-sizing: border-box;">`;
                 if (subText) {
@@ -374,7 +375,6 @@
                 return qHtml;
             });
 
-            // 각주 변환
             html = html.replace(/\[각주:(.*?)\]/g, function(match, fnContent) {
                 let fnHtml = `<span class="footnote-container" tabindex="0"><span class="footnote-text">[${fnIndex}]</span><span class="footnote-content"><span class="fn-num">[${fnIndex}]</span> ${fnContent}<span class="fn-close-hint">닫으려면 바깥을 클릭하세요</span></span></span>`;
                 footnotesList.push({ num: fnIndex, content: fnContent });
@@ -382,7 +382,6 @@
                 return fnHtml;
             });
 
-            // [사진:1][사진:2|출처] 연속 사용 및 출처 가로 배열 처리
             let usedImageIndices = new Set();
             html = html.replace(/(?:\[사진:(\d+)(?:\|([^\]]+))?\])+/g, function(fullMatch) {
                 let matchData = [];
@@ -398,9 +397,15 @@
                 let groupHtml = `<div class="wiki-img-flex-group" style="display: flex; gap: 8px; flex-direction: row; flex-wrap: nowrap; margin: 10px 0; width: 100%; box-sizing: border-box; justify-content: center;">`;
                 validImages.forEach(item => {
                     usedImageIndices.add(item.idx);
+                    let imgObj = secImages[item.idx];
+                    let src = typeof imgObj === 'string' ? imgObj : imgObj.src;
+                    let x = imgObj.x || 0; let y = imgObj.y || 0; let scale = imgObj.scale || 1;
+
                     groupHtml += `
                     <div style="border: 1px solid #ccc; padding: 4px; background: #fff; flex: 1; max-width: calc(100% / ${validImages.length}); text-align: center; border-radius: 8px; box-sizing: border-box; overflow: hidden;">
-                        <img src="${secImages[item.idx]}" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 4px;">
+                        <div style="width: 100%; height: 100%; overflow: hidden; border-radius: 4px;">
+                            <img class="wiki-panzoom-img" data-type="section" data-secid="${secId}" data-imgidx="${item.idx}" src="${src}" style="width: 100%; height: 100%; object-fit: cover; display: block; margin: 0 auto; transform: translate(${x}px, ${y}px) scale(${scale}); cursor: grab; user-select: none;" draggable="false">
+                        </div>
                         ${item.source ? `<div style="font-size: 11px; color: #888; margin-top: 4px; text-align: center; word-break: break-all;">ⓒ ${item.source}</div>` : ''}
                     </div>`;
                 });
@@ -408,17 +413,34 @@
                 return groupHtml;
             });
 
-            // 단독 사진 및 출처 변환
+            // 단독 사진 렌더링 (리사이징 + 팬줌 모두 가능)
             html = html.replace(/\[사진:(\d+)(?:\|([^\]]+))?\]/g, function(match, indexStr, sourceText) {
                 let idx = parseInt(indexStr) - 1;
                 let source = sourceText ? sourceText.trim() : "";
-                if(secImages[idx]) {
+                let imgObj = secImages[idx];
+                
+                if(imgObj) {
                     if (usedImageIndices.has(idx)) return ''; 
                     usedImageIndices.add(idx);
+                    
+                    let src = typeof imgObj === 'string' ? imgObj : imgObj.src;
+                    let w = imgObj.w || '100%';
+                    let h = imgObj.h || 'auto';
+                    let x = imgObj.x || 0;
+                    let y = imgObj.y || 0;
+                    let scale = imgObj.scale || 1;
+                    
+                    // 세로 크기가 'auto'가 아니라면 이미지가 부모 영역에 꽉 차도록 100% 설정
+                    let imgH = h === 'auto' ? 'auto' : '100%';
+
                     return `
-                    <div style="border: 1px solid #ccc; padding: 5px; background: #fff; margin: 10px 0; max-width: 100%; text-align: center; border-radius: 8px; box-sizing: border-box;">
-                        <img src="${secImages[idx]}" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 4px;">
-                        ${source ? `<div style="font-size: 11px; color: #888; margin-top: 4px; text-align: center; word-break: break-all;">ⓒ ${source}</div>` : ''}
+                    <div style="margin: 10px 0; text-align: center; width: 100%; box-sizing: border-box; display: flex; justify-content: center;">
+                        <div class="wiki-resizable-wrap" data-secid="${secId}" data-imgidx="${idx}" style="border: 1px solid #ccc; padding: 5px; background: #fff; max-width: 100%; border-radius: 8px; box-sizing: border-box; resize: both; overflow: hidden; width: ${w}; height: ${h}; display: inline-block; position: relative;">
+                            <div style="width: 100%; height: 100%; overflow: hidden; border-radius: 4px; position: relative;">
+                                <img class="wiki-panzoom-img" data-type="section" data-secid="${secId}" data-imgidx="${idx}" src="${src}" style="width: 100%; height: ${imgH}; object-fit: cover; display: block; margin: 0 auto; transform: translate(${x}px, ${y}px) scale(${scale}); cursor: grab; user-select: none;" draggable="false">
+                            </div>
+                            ${source ? `<div style="font-size: 11px; color: #888; margin-top: 4px; text-align: center; word-break: break-all; position: relative; z-index: 2; background: #fff;">ⓒ ${source}</div>` : ''}
+                        </div>
                     </div>`;
                 }
                 return `[사진:${indexStr} 없음]`;
@@ -429,7 +451,7 @@
 
         let infoRowsHtml = '';
         infoRows.forEach(row => {
-            infoRowsHtml += `<tr><td style="background-color: ${color}; color: white; width: 30%; padding: 6px 4px; font-weight: bold; text-align: center; border: 1px solid #bbb;">${row.k}</td><td style="padding: 6px 8px; border: 1px solid #bbb; word-break: break-all;">${parseText(row.v).parsedHtml}</td></tr>`;
+            infoRowsHtml += `<tr><td style="background-color: ${color}; color: ${textColor}; width: 30%; padding: 6px 4px; font-weight: bold; text-align: center; border: 1px solid #bbb;">${row.k}</td><td style="padding: 6px 8px; border: 1px solid #bbb; word-break: break-all;">${parseText(row.v).parsedHtml}</td></tr>`;
         });
 
         let tocHtml = `<ul style="list-style: none; padding: 0; margin: 0;">`;
@@ -440,34 +462,39 @@
             counters[sec.level]++;
             for(let i = sec.level + 1; i <= 3; i++) counters[i] = 0; 
             let numStr = counters.slice(1, sec.level + 1).join('.');
-            let secId = 's-' + numStr.replace(/\./g, '-');
+            let htmlId = 's-' + numStr.replace(/\./g, '-');
 
-            tocHtml += `<li style="padding-left: ${(sec.level - 1) * 12}px;"><a href="#${secId}" style="color: #0275d8; text-decoration: none;">${numStr}.</a> ${sec.title}</li>`;
+            tocHtml += `<li style="padding-left: ${(sec.level - 1) * 12}px;"><a href="#${htmlId}" style="color: #0275d8; text-decoration: none;">${numStr}.</a> ${sec.title}</li>`;
 
-            let textResult = parseText(sec.content, sec.images);
+            let textResult = parseText(sec.content, sec.images, sec.id);
             let parsedContent = textResult.parsedHtml;
 
             let remainingImagesHtml = '';
-            let remainingImgs = sec.images.filter((img, idx) => !textResult.usedIndices.has(idx));
-            if(remainingImgs.length > 0) {
-                remainingImagesHtml = `<div style="display: flex; gap: 8px; flex-direction: row; flex-wrap: nowrap; margin-top: 15px; width:100%; justify-content: center;">`;
-                remainingImgs.forEach(img => {
-                    remainingImagesHtml += `<div style="border: 1px solid #ccc; padding: 4px; background: #fff; flex: 1; max-width: calc(100% / ${remainingImgs.length}); text-align: center; border-radius: 8px;"><img src="${img}" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 4px;"></div>`;
-                });
-                remainingImagesHtml += `</div>`;
-            }
+            let hasRemaining = false;
+            let rHtml = `<div style="display: flex; gap: 8px; flex-direction: row; flex-wrap: nowrap; margin-top: 15px; width:100%; justify-content: center;">`;
+            sec.images.forEach((imgObj, idx) => {
+                if (!textResult.usedIndices.has(idx)) {
+                    hasRemaining = true;
+                    let src = typeof imgObj === 'string' ? imgObj : imgObj.src;
+                    let x = imgObj.x || 0; let y = imgObj.y || 0; let scale = imgObj.scale || 1;
+                    rHtml += `<div style="border: 1px solid #ccc; padding: 4px; background: #fff; flex: 1; max-width: calc(100% / ${sec.images.length}); text-align: center; border-radius: 8px; overflow: hidden;">
+                        <div style="width: 100%; height: 100%; overflow: hidden; border-radius: 4px;">
+                            <img class="wiki-panzoom-img" data-type="section" data-secid="${sec.id}" data-imgidx="${idx}" src="${src}" style="width: 100%; height: 100%; object-fit: cover; display: block; margin: 0 auto; transform: translate(${x}px, ${y}px) scale(${scale}); cursor: grab; user-select: none;" draggable="false">
+                        </div>
+                    </div>`;
+                }
+            });
+            rHtml += `</div>`;
+            if (hasRemaining) remainingImagesHtml = rHtml;
 
             let indentStyle = sec.level > 1 ? `padding-left: ${(sec.level - 1) * 12}px;` : '';
-            
-            let fontSize = '1.4em';
-            if (sec.level === 2) fontSize = '1.2em';
-            if (sec.level === 3) fontSize = '1.15em'; 
+            let fontSize = sec.level === 1 ? '1.4em' : sec.level === 2 ? '1.2em' : '1.15em'; 
 
             bodyHtml += `
             <div style="margin-top: 25px; width: 100%; box-sizing: border-box; ${indentStyle}">
                 <details open class="wiki-section">
                     <summary style="list-style: none; outline: none; cursor: pointer; display: block; border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-bottom: 10px;">
-                        <h2 id="${secId}" class="wiki-heading-${sec.level}" style="font-size: ${fontSize}; font-weight: bold; margin: 0; display: flex; align-items: center; width: 100%;">
+                        <h2 id="${htmlId}" class="wiki-heading-${sec.level}" style="font-size: ${fontSize}; font-weight: bold; margin: 0; display: flex; align-items: center; width: 100%;">
                             <a href="#toc-top" style="color: #0275d8; text-decoration: none; margin-right: 6px; flex-shrink: 0;">${numStr}.</a> 
                             <span class="toggle-text-wrap" style="flex: 1; display: flex; justify-content: space-between; align-items: center;"><span>${sec.title}</span></span>
                         </h2>
@@ -492,26 +519,23 @@
             const exText = document.getElementById('in-extra-text').value.replace(/\n/g, '<br>');
             extraBoxHtml = `
             <details style="margin: 0; padding: 0; border-top: 2px solid ${color};">
-                <summary style="background-color: ${color}; padding: 10px; text-align: center; cursor: pointer; font-size: 1em; color: white; list-style: none; outline: none; font-weight: bold;">▼ ${exTitle} (접기/펴기)</summary>
+                <summary style="background-color: ${color}; padding: 10px; text-align: center; cursor: pointer; font-size: 1em; color: ${textColor}; list-style: none; outline: none; font-weight: bold;">▼ ${exTitle} (접기/펴기)</summary>
                 <div style="padding: 15px; font-size: 0.95em; color: #444; background-color: #fff; line-height: 1.6;">
-                    ${srcExtraImg ? `<div style="text-align:center; margin-bottom:12px; border: 1px solid #ccc; padding: 5px; border-radius: 8px;"><img src="${srcExtraImg}" style="max-width:100%; height:auto; border-radius:4px;"></div>` : ''}
+                    ${srcExtraImg ? `<div style="text-align:center; margin-bottom:12px; border: 1px solid #ccc; padding: 5px; border-radius: 8px; overflow: hidden;">
+                        <div style="width: 100%; height: auto; overflow: hidden; border-radius: 4px; position: relative;">
+                            <img class="wiki-panzoom-img" data-type="extra" src="${srcExtraImg}" style="width: 100%; height: auto; display: block; margin: 0 auto; transform: translate(${extraTransform.x}px, ${extraTransform.y}px) scale(${extraTransform.scale}); cursor: grab; user-select: none;" draggable="false">
+                        </div>
+                    </div>` : ''}
                     <div>${exText}</div>
                 </div>
             </details>`;
         }
 
-        // 🌟 🌟 🌟 모바일 반응형 시 본문 글씨 축소 및 모든 문단 제목 크기 통일 미디어 쿼리 🌟 🌟 🌟
         const finalHtml = `
 <style>
     .footnote-container { display: inline-block; position: relative; cursor: pointer; }
     .footnote-text { font-size: 0.8em; color: #0275d8; vertical-align: super; font-weight: normal; }
-    .footnote-content {
-        display: none; position: fixed !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; 
-        background-color: #ffffff !important; color: #373a3c !important; border: 1px solid #cccccc !important; padding: 20px !important; 
-        width: 280px !important; max-width: 85vw !important; height: auto !important; min-height: min-content !important; box-sizing: border-box !important; 
-        white-space: normal !important; word-break: break-all !important; overflow-wrap: break-word !important; text-align: justify !important; 
-        border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important; font-size: 0.9em !important; line-height: 1.6 !important; z-index: 9999999 !important;
-    }
+    .footnote-content { display: none; position: fixed !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; background-color: #ffffff !important; color: #373a3c !important; border: 1px solid #cccccc !important; padding: 20px !important; width: 280px !important; max-width: 85vw !important; height: auto !important; min-height: min-content !important; box-sizing: border-box !important; white-space: normal !important; word-break: break-all !important; overflow-wrap: break-word !important; text-align: justify !important; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important; font-size: 0.9em !important; line-height: 1.6 !important; z-index: 9999999 !important; }
     .footnote-container:hover .footnote-content { display: block !important; }
     .fn-num { display: inline !important; color: #0275d8; font-weight: bold; margin-right: 5px; }
     .fn-close-hint { display: block; margin-top: 15px; padding-top: 8px; border-top: 1px solid #eee; font-size: 0.75em; color: #999; text-align: center; }
@@ -530,25 +554,17 @@
     details.wiki-section:not([open]) summary h2 .toggle-text-wrap::after { content: '[펼치기]'; font-size: 0.5em; font-weight: normal; color: #0275d8; margin-left: auto; }
     details.wiki-section[open] summary h2 .toggle-text-wrap::after { content: '[접기]'; font-size: 0.5em; font-weight: normal; color: #0275d8; margin-left: auto; }
 
-    /* 모바일 가동 시 글씨 비율 최적화 */
     @media screen and (max-width: 600px) {
         .wiki-main-container { width: 100% !important; padding: 0 5px !important; }
         .wiki-main-title { font-size: 1.7em !important; }
-        
-        /* 💥 모바일에서 모든 문단 제목(1,2,3단계) 크기를 똑같이 통일! 💥 */
-        .wiki-section summary h2, 
-        .wiki-section summary h2.wiki-heading-2, 
-        .wiki-section summary h2.wiki-heading-3 { font-size: 1.05em !important; }
-        
-        /* 💥 모바일에서 위키 내 본문 텍스트가 너무 둔탁하게 크지 않도록 최적화 💥 */
+        .wiki-section summary h2, .wiki-section summary h2.wiki-heading-2, .wiki-section summary h2.wiki-heading-3 { font-size: 1.05em !important; }
         .wiki-body-content-text { font-size: 13px !important; line-height: 1.55 !important; }
-
         .wiki-img-flex-group { gap: 4px !important; }
         .wiki-img-flex-group div { border-radius: 4px !important; padding: 2px !important; min-width: 60px !important; }
     }
 </style>
 
-<div class="wiki-main-container" style="font-family: sans-serif; color: #373a3c; width: 95%; max-width: 720px; margin: 0 auto; line-height: 1.4; box-sizing: border-box;">
+<div class="wiki-main-container" style="font-family: sans-serif; color: #373a3c; width: 95%; max-width: 720px; margin: 0 auto; line-height: 1.4; box-sizing: border-box; background: white; padding: 15px;">
 
     <h1 class="wiki-main-title" style="font-size: 2.2em; border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-bottom: 5px; font-weight: bold; letter-spacing: -1px; word-break: keep-all;">${title}</h1>
     <div style="text-align: right; font-size: 0.8em; color: #666; margin-bottom: 10px;">최근 수정 시각: ${editTime}</div>
@@ -567,13 +583,15 @@
     </div>` : ''}
 
     <div style="margin: 0 auto 20px auto; width: 100%; max-width: 450px; border: 2px solid ${color}; border-radius: 4px; overflow: hidden; font-size: 0.9em; background-color: #fff; box-sizing: border-box; position: relative;">
-        <div style="background-color: ${color}; color: white; text-align: center; padding: 10px 10px; border-bottom: 2px solid ${color};">
+        <div style="background-color: ${color}; color: ${textColor}; text-align: center; padding: 10px 10px; border-bottom: 2px solid ${color};">
             <div style="font-weight: 777; font-size: 1.8em; margin-bottom: 5px; line-height: 1.1;">${infoTitle}</div>
             ${infoSub}
         </div>
         ${srcProfileImg ? `
-        <div style="padding: 5px; text-align: center; border-bottom: 2px solid ${color}; background-color: #fff;">
-            <img src="${srcProfileImg}" style="width: 100%; height: auto; display: block; margin: 0 auto;" alt="프로필">
+        <div style="padding: 5px; text-align: center; border-bottom: 2px solid ${color}; background-color: #fff; overflow: hidden; position: relative;">
+            <div style="width: 100%; height: auto; overflow: hidden; border-radius: 4px; position: relative;">
+                <img class="wiki-panzoom-img" data-type="profile" src="${srcProfileImg}" style="width: 100%; height: auto; display: block; margin: 0 auto; transform: translate(${profileTransform.x}px, ${profileTransform.y}px) scale(${profileTransform.scale}); cursor: grab; user-select: none;" alt="프로필" draggable="false">
+            </div>
         </div>` : ''}
         <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin: 0; padding: 0; border-style: hidden;">
             ${infoRowsHtml}
@@ -619,35 +637,151 @@
     function copyHTML() {
         const finalHtml = generateFullHTML();
         navigator.clipboard.writeText(finalHtml).then(() => {
-            alert("복사되었습니다! ( ᴗ ̫ ᴗ )");
+            alert("복사되었습니다! ( ᴗ ̫ ᴗ )\n*크기를 조절하고 맞춘 위치 그대로 복사됩니다!");
         }).catch(err => {
             alert("복사 실패 ㅠ.ㅠ 브라우저 권한을 확인해주세요!");
         });
     }
+
+    function saveAsImage() {
+        const target = document.querySelector('#preview-area .wiki-main-container');
+        if (!target) return alert('저장할 화면이 없습니다.');
+
+        const btn = document.querySelector('.btn-save-img');
+        const originalText = btn.innerText;
+        btn.innerText = "저장 중...";
+        
+        html2canvas(target, { useCORS: true, backgroundColor: '#ffffff', scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'kxxchowiki_capture.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            btn.innerText = originalText;
+        }).catch(err => {
+            alert('이미지 저장 중 오류가 발생했습니다 ㅠ.ㅠ');
+            btn.innerText = originalText;
+        });
+    }
+
+    // --- 에디터 내 마우스 드래그 & 휠 기능 (크롭/리사이징) ---
+    let isDraggingImg = false;
+    let dragTarget = null;
+    let startX, startY;
+    let initialX, initialY;
+
+    // 사진 위치 맞춤 (드래그 시작)
+    document.addEventListener('mousedown', function(e) {
+        if (e.target.classList.contains('wiki-panzoom-img')) {
+            e.preventDefault();
+            isDraggingImg = true;
+            dragTarget = e.target;
+            dragTarget.style.cursor = 'grabbing';
+            startX = e.clientX;
+            startY = e.clientY;
+            
+            let type = dragTarget.dataset.type;
+            let state;
+            if (type === 'profile') state = profileTransform;
+            else if (type === 'extra') state = extraTransform;
+            else {
+                let secId = dragTarget.dataset.secid;
+                let idx = dragTarget.dataset.imgidx;
+                state = sectionImagesStorage[secId][idx];
+            }
+            initialX = state.x || 0;
+            initialY = state.y || 0;
+        }
+    });
+
+    // 사진 위치 맞춤 (드래그 중)
+    document.addEventListener('mousemove', function(e) {
+        if (!isDraggingImg || !dragTarget) return;
+        let dx = e.clientX - startX;
+        let dy = e.clientY - startY;
+        
+        let type = dragTarget.dataset.type;
+        let state;
+        if (type === 'profile') state = profileTransform;
+        else if (type === 'extra') state = extraTransform;
+        else {
+            let secId = dragTarget.dataset.secid;
+            let idx = dragTarget.dataset.imgidx;
+            state = sectionImagesStorage[secId][idx];
+        }
+        
+        state.x = initialX + dx;
+        state.y = initialY + dy;
+        dragTarget.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale || 1})`;
+    });
+
+    // 드래그 종료 및 사진 틀 크기(resize) 상태 업데이트
+    document.addEventListener('mouseup', function(e) {
+        if (isDraggingImg && dragTarget) {
+            dragTarget.style.cursor = 'grab';
+            isDraggingImg = false;
+            dragTarget = null;
+        }
+        
+        // 사진틀 크기(모서리 드래그)가 변경되었다면 저장
+        document.querySelectorAll('.wiki-resizable-wrap').forEach(wrap => {
+            let secId = wrap.dataset.secid;
+            let idx = wrap.dataset.imgidx;
+            if (secId && sectionImagesStorage[secId][idx]) {
+                let state = sectionImagesStorage[secId][idx];
+                let newW = wrap.style.width;
+                let newH = wrap.style.height;
+                if (state.w !== newW || state.h !== newH) {
+                    state.w = newW;
+                    state.h = newH;
+                }
+            }
+        });
+    });
+
+    // 사진 부분 확대 (마우스 휠)
+    document.addEventListener('wheel', function(e) {
+        if (e.target.classList.contains('wiki-panzoom-img')) {
+            e.preventDefault(); // 스크롤 방지
+            let type = e.target.dataset.type;
+            let state;
+            if (type === 'profile') state = profileTransform;
+            else if (type === 'extra') state = extraTransform;
+            else {
+                let secId = e.target.dataset.secid;
+                let idx = e.target.dataset.imgidx;
+                state = sectionImagesStorage[secId][idx];
+            }
+            
+            let zoom = e.deltaY < 0 ? 0.05 : -0.05;
+            state.scale = Math.max(0.1, (state.scale || 1) + zoom);
+            
+            e.target.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+        }
+    }, { passive: false });
+
 
     window.onload = function() {
         addInfoRow("항목명 1", "여기에 프로필 정보를 입력하세요 [각주:각주 예시]");
         addInfoRow("항목명 2", "왼쪽 버튼으로 계속 추가 가능합니다! 제한 X");
 
         const dummy1 = "https://via.placeholder.com/150x150/008275/fff?text=Image+1";
-        const dummy2 = "https://via.placeholder.com/150x150/333333/fff?text=Image+2";
-
+        
         addSectionUI({ 
             level: 1, 
             title: "1단계 문단 제목", 
-            content: "[사진:1|커미션] [인용구:원문 대사 예시|이곳은 번역이나 상세 설명이 들어가는 칸. 출처를 적어도 좋습니다]\n\n여기에 본문 내용을 입력하세요."     
+            content: "[사진:1|커미션] [인용구:원문 대사 예시|이곳은 번역이나 상세 설명이 들어가는 칸]\n\n예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력"     
         }, [dummy1]);
         
         addSectionUI({     
             level: 2, 
             title: "2단계 하위 문단 제목", 
-            content: "[사진:1][사진:2|커미션 출처 예시]\n\n여러장 가로 배열 상태에서도 출처가 개별적으로 적용됩니다!" 
+            content: "[사진:1][사진:2|출처 예시]\n\n여러장 가로 배열 상태에서도 출처가 개별적으로 적용됩니다!" 
         });
     
         addSectionUI({ 
             level: 3, 
             title: "3단계 세부적 문단 제목", 
-            content: "예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 " 
+            content: "예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력" 
         });
         
         updatePreview();
