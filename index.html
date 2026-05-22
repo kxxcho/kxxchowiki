@@ -27,6 +27,10 @@
     .btn-copy:hover { background: #000; }
     .btn-save-img { background: #008275; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 1; font-size: 15px; transition: 0.2s; }
     .btn-save-img:hover { background: #00665c; }
+    
+    /* 임시저장 버튼 스타일 추가 */
+    .btn-draft { background: #e9ecef; color: #333; border: 1px solid #ccc; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; transition: 0.2s; flex: 1;}
+    .btn-draft:hover { background: #dee2e6; }
 
     .preview-header { background: #008275; color: white; padding: 12px 20px; font-weight: bold; font-size: 14px; display: flex; justify-content: space-between; }
     #preview-area { padding: 20px; background: #fff; overflow-y: auto; max-height: 80vh; }
@@ -58,22 +62,24 @@
     <div class="welcome-modal">
         <div class="welcome-title">KXXCHOWIKI 에디터 가이드</div>
         <div class="welcome-content">
-            그간 티스토리 코드로 배포를 했으나 이래저래 어려움이 많아 가볍게 수정이 가능한 에디터를 새로 제작해보았습니다! ⁃ ⩊ ⁃  최하단 카피라이트 삭제, 에디터 자작 발언 등의 행위는 당연히 금지하고 있습니다 ㅜ.ㅜ<br>이를 제외한 원본을 훼손하지 않는 선에서 일부 수정은 허용하고 있으며 (추가 표 삽입, 자간 조절 등 문의 없이 코드 수정 사용 가능) 이외 문의는 언제나 <a href="https://asked.kr/kxxchox" target="_blank" style="color: #008275; text-decoration: none;">https://asked.kr/kxxchox </a>를 통해 주시면 빠른 회신 및 업데이트 하도록 하겠습니다!
+            그간 티스토리 코드로 배포를 했으나 이래저래 어려움이 많아 가볍게 수정이 가능한 에디터를 새로 제작해보았습니다! ⁃ ⩊ ⁃  최하단 카피라이트 삭제, 에디터 자작 발언 등의 행위는 당연히 금지하고 있습니다 ㅜ.ㅜ 이를 제외한 원본을 훼손하지 않는 선에서 일부 수정은 허용하고 있으며 (추가 표 삽입, 자간 조절 등 문의 없이 코드 수정 사용 가능) 이외 문의는 언제나 <a href="http://spin-spin.com/pockyandcancho" target="_blank" style="color: #008275; text-decoration: none;">http://spin-spin.com/pockyandcancho </a>를 통해 주시면 빠른 회신 및 업데이트 하도록 하겠습니다!
 <br><br>
             <span style="color: #888;">에디터 사용 금지 드림) 사카모토 데이즈 ㅡ 나구모 요이치 </span><br><br>
                만들고 인용으로 자랑해주시면 정말... 좋아합니다<br>
                매번 인용으로 자랑해주시는 분들께 감사하고 있어요  (⸝⸝๑  ̫ ๑⸝⸝⸝) <br><br>
             
             <hr style="border:0; border-top:1px solid #eee; margin:12px 0;">
-               <span style="color: #008275;">1차 수정!!!</span> 사진 자유 크기 조절 & 위치 맞춤(크롭) 기능 (๑ ⩊ ๑)<br>
-               <span style="color: #008275;">2차 수정!!!</span> HTML 코드 말고 사진 저장 기능을 추가했어요 (⁃ ⩊ ⁃)
+               <span style="color: #008275;">1차 수정!!!</span> 사진 자유 크기 조절 & 위치 맞춤 기능 (๑ ⩊ ๑)<br>
+               <span style="color: #008275;">2차 수정!!!</span> 티스토리 미사용을 위해 사진 저장 기능(⁃ ⩊ ⁃)<br>
+               <span style="color: #008275;">3차 수정!!!</span> 저장/불러오기 기능 및 텍스트 꾸미기 기능 (ᴖ⩊ᴖ)
             <hr style="border:0; border-top:1px solid #eee; margin:12px 0;">
             <b>특수 태그 사용 안내</b>
             <ul>
                 <li><b>각주 달기</b>: 문장 뒤에 <code>[각주:설명내용]</code>을 적으면 실시간으로 각주 번호가 부여되며 팝업 및 하단 목록이 자동 생성됩니다. </li>
                 <li><b>인용구 틀</b>: 대사나 강조 구절은 <code>[인용구:원문대사|번역설명]</code> 태그를 사용해 인용구 틀을 끼울 수 있습니다.</li>
                 <li><b>사진 삽입</b>: 문단 내 사진 업로드는 원하는 위치에 <code>[사진:1]</code>, <code>[사진:2]</code> 를 기입하면 됩니다! 공백없이 붙여쓰면 가로 배열로 적용됩니다.</li>
-                <li><b>출처 표기</b>: 사진 뒤에 파이프 기호를 붙여 <code>[사진:1|출처내용]</code>를 쓰면 ⓒ 기호와 함께 출처가 표기됩니다.</li>
+                <li><b>텍스트 스타일</b>: <code>[굵게:강조할내용]</code>, <code>[링크:클릭할텍스트|https://이동할주소]</code>, <code>[색상:색칠할내용|#ff0000]</code> 등을 통해 텍스트를 꾸밀 수 있습니다.</li>
+                <li><b>티스토리 기준</b>: 토글 기능이 있습니다! 목차에 하이퍼링크가 달려 있어 목차에서 항목 선택 시 이동 가능 + 각 문단별 접기 펼치기 기능 모두 지원하고 있습니다 (^ヮ^)</li>
             </ul>
         </div>
         <button class="btn-modal-close" onclick="closeWelcomeModal()">에디터 시작하기</button>
@@ -155,7 +161,8 @@
             <b>본문 특수 태그 가이드</b><br>
             ➀ 각주: <code>[각주:설명내용]</code><br>
             ➁ 인용구: <code>[인용구:원문대사|번역설명]</code><br>
-            ➂ 사진: <code>[사진:1|커미션 출처]</code> (우측 미리보기 화면에서 모서리를 잡아 크기를 조절하거나, 안에서 휠/드래그로 크롭 가능!)
+            ➂ 사진: <code>[사진:1|출처]</code> (사진 클릭 후 드래그/휠로 조절!)<br>
+            ➃ 글씨: <code>[굵게:내용]</code>, <code>[링크:텍스트|URL]</code>, <code>[색상:내용|#HEX코드]</code>
         </div>
         
         <div id="sections-container"></div>
@@ -170,7 +177,11 @@
         
         <div id="preview-area"></div>
 
-        <div style="display: flex; gap: 15px; padding: 20px; background: #f9f9f9; border-top: 1px solid #eee;">
+        <div style="display: flex; gap: 10px; padding: 20px; background: #f9f9f9; border-top: 1px solid #eee; flex-wrap: wrap;">
+            <div style="flex-basis: 100%; display: flex; gap: 10px; margin-bottom: 5px;">
+                <button class="btn-draft" onclick="saveDraft()">임시 저장하기</button>
+                <button class="btn-draft" onclick="loadDraft()">임시 저장 불러오기</button>
+            </div>
             <button class="btn-copy" onclick="copyHTML()">HTML 코드 복사하기</button>
             <button class="btn-save-img" onclick="saveAsImage()">이미지로 저장하기</button>
         </div>
@@ -197,7 +208,7 @@
             const reader = new FileReader();
             reader.onload = function(e) { 
                 srcProfileImg = e.target.result; 
-                profileTransform = { x: 0, y: 0, scale: 1 }; // 새 이미지면 위치 리셋
+                profileTransform = { x: 0, y: 0, scale: 1 }; 
                 updatePreview(); 
             };
             reader.readAsDataURL(file);
@@ -235,7 +246,7 @@
             reader.onload = e => {
                 sectionImagesStorage[secId].push({
                     src: e.target.result,
-                    w: '100%', h: 'auto', x: 0, y: 0, scale: 1 // 개별 이미지의 크기 및 위치 정보 보관
+                    w: '100%', h: 'auto', x: 0, y: 0, scale: 1 
                 }); 
                 processed++;
                 if (processed === files.length) {
@@ -365,6 +376,15 @@
 
         function parseText(text, secImages = [], secId = '') {
             let html = text.replace(/\n/g, '<br>');
+
+            // --- 새로 추가된 텍스트 꾸미기 파서 ---
+            // 굵게
+            html = html.replace(/\[굵게:(.*?)\]/g, '<strong style="font-weight: 900;">$1</strong>');
+            // 링크
+            html = html.replace(/\[링크:(.*?)\|([^\]]+)\]/g, '<a href="$2" target="_blank" style="color: #0275d8; text-decoration: underline;">$1</a>');
+            // 색상
+            html = html.replace(/\[색상:(.*?)\|([^\]]+)\]/g, '<span style="color: $2;">$1</span>');
+            // ------------------------------------
             
             html = html.replace(/\[인용구:([^\]|]+)(?:\|([^\]]+))?\]/g, function(match, mainText, subText) {
                 let qHtml = `<div style="border-left: 3px solid ${color}; background-color: #f9f9f9; padding: 10px 15px; margin-bottom: 6px; font-family: 'Noto Sans JP', 'Pretendard', sans-serif; font-size: 0.85em; width: auto; max-width: 100%; box-sizing: border-box;">`;
@@ -415,7 +435,7 @@
                 return groupHtml;
             });
 
-            // 단독 사진 렌더링 (리사이징 + 팬줌 모두 가능)
+            // 단독 사진 렌더링
             html = html.replace(/\[사진:(\d+)(?:\|([^\]]+))?\]/g, function(match, indexStr, sourceText) {
                 let idx = parseInt(indexStr) - 1;
                 let source = sourceText ? sourceText.trim() : "";
@@ -432,7 +452,6 @@
                     let y = imgObj.y || 0;
                     let scale = imgObj.scale || 1;
                     
-                    // 세로 크기가 'auto'가 아니라면 이미지가 부모 영역에 꽉 차도록 100% 설정
                     let imgH = h === 'auto' ? 'auto' : '100%';
 
                     return `
@@ -639,7 +658,7 @@
     function copyHTML() {
         const finalHtml = generateFullHTML();
         navigator.clipboard.writeText(finalHtml).then(() => {
-            alert("복사되었습니다! ( ᴗ ̫ ᴗ )\n*크기를 조절하고 맞춘 위치 그대로 복사됩니다!");
+            alert("복사되었습니다! ( ᴗ ̫ ᴗ )");
         }).catch(err => {
             alert("복사 실패 ㅠ.ㅠ 브라우저 권한을 확인해주세요!");
         });
@@ -651,7 +670,7 @@
 
         const btn = document.querySelector('.btn-save-img');
         const originalText = btn.innerText;
-        btn.innerText = "저장 중...";
+        btn.innerText = "wait...";
         
         html2canvas(target, { useCORS: true, backgroundColor: '#ffffff', scale: 2 }).then(canvas => {
             const link = document.createElement('a');
@@ -665,13 +684,113 @@
         });
     }
 
+    // --- 임시 저장 및 불러오기 기능 ---
+    function saveDraft() {
+        try {
+            let infoRows = [];
+            document.querySelectorAll('.info-row-item').forEach(row => {
+                infoRows.push({
+                    k: row.querySelector('.info-k').value,
+                    v: row.querySelector('.info-v').value
+                });
+            });
+
+            let sections = [];
+            document.querySelectorAll('.section-block').forEach(block => {
+                sections.push({
+                    id: block.id,
+                    level: parseInt(block.querySelector('.sec-level').value),
+                    title: block.querySelector('.sec-title').value,
+                    content: block.querySelector('.sec-content').value
+                });
+            });
+
+            const draft = {
+                title: document.getElementById('in-title').value,
+                color: document.getElementById('in-color').value,
+                textColor: document.getElementById('in-text-color').value,
+                editTime: document.getElementById('in-edit-time').value,
+                category: document.getElementById('in-category').value,
+                spoiler: document.getElementById('in-spoiler').checked,
+                infoTitle: document.getElementById('in-info-title').value,
+                infoSub: document.getElementById('in-info-sub').value,
+                showExtra: document.getElementById('in-show-extra').checked,
+                extraTitle: document.getElementById('in-extra-title').value,
+                extraText: document.getElementById('in-extra-text').value,
+                infoRows: infoRows,
+                sections: sections,
+                srcProfileImg: srcProfileImg,
+                profileTransform: profileTransform,
+                srcExtraImg: srcExtraImg,
+                extraTransform: extraTransform,
+                sectionImagesStorage: sectionImagesStorage
+            };
+
+            localStorage.setItem('kxxchowiki_draft', JSON.stringify(draft));
+            alert('임시 저장이 완료되었습니다₍ᐢ•ᴗ•ᐢ₎!\n(브라우저를 닫아도 내역이 유지됩니다)');
+        } catch (e) {
+            console.error(e);
+            alert('저장 실패 ㅠ.ㅠ\n올리신 사진의 용량이 너무 클 수 있습니다. 일부 사진을 지우고 다시 시도해주세요!');
+        }
+    }
+
+    function loadDraft() {
+        const saved = localStorage.getItem('kxxchowiki_draft');
+        if (!saved) {
+            alert('저장된 임시 데이터가 없습니다.');
+            return;
+        }
+        try {
+            const draft = JSON.parse(saved);
+            
+            document.getElementById('in-title').value = draft.title || '';
+            document.getElementById('in-color').value = draft.color || '#008275';
+            document.getElementById('in-text-color').value = draft.textColor || '#ffffff';
+            document.getElementById('in-edit-time').value = draft.editTime || '';
+            document.getElementById('in-category').value = draft.category || '';
+            document.getElementById('in-spoiler').checked = draft.spoiler || false;
+            document.getElementById('in-info-title').value = draft.infoTitle || '';
+            document.getElementById('in-info-sub').value = draft.infoSub || '';
+            document.getElementById('in-show-extra').checked = draft.showExtra || false;
+            document.getElementById('in-extra-title').value = draft.extraTitle || '';
+            document.getElementById('in-extra-text').value = draft.extraText || '';
+
+            srcProfileImg = draft.srcProfileImg || "";
+            profileTransform = draft.profileTransform || { x: 0, y: 0, scale: 1 };
+            srcExtraImg = draft.srcExtraImg || "";
+            extraTransform = draft.extraTransform || { x: 0, y: 0, scale: 1 };
+            sectionImagesStorage = draft.sectionImagesStorage || {};
+
+            // 기존 행과 섹션 초기화
+            document.getElementById('info-rows-container').innerHTML = '';
+            if (draft.infoRows) {
+                draft.infoRows.forEach(row => addInfoRow(row.k, row.v));
+            }
+
+            document.getElementById('sections-container').innerHTML = '';
+            if (draft.sections) {
+                draft.sections.forEach(sec => {
+                    const oldId = sec.id;
+                    const oldImages = sectionImagesStorage[oldId] || [];
+                    delete sectionImagesStorage[oldId]; 
+                    addSectionUI(sec, oldImages); 
+                });
+            }
+
+            updatePreview();
+            alert('임시 저장된 데이터를 불러왔습니다! ⁃ ⩊ ⁃');
+        } catch (e) {
+            console.error(e);
+            alert('데이터를 불러오는 중 오류가 발생했습니다(๑_๑；)');
+        }
+    }
+
     // --- 에디터 내 마우스 드래그 & 휠 기능 (크롭/리사이징) ---
     let isDraggingImg = false;
     let dragTarget = null;
     let startX, startY;
     let initialX, initialY;
 
-    // 사진 위치 맞춤 (드래그 시작)
     document.addEventListener('mousedown', function(e) {
         if (e.target.classList.contains('wiki-panzoom-img')) {
             e.preventDefault();
@@ -695,7 +814,6 @@
         }
     });
 
-    // 사진 위치 맞춤 (드래그 중)
     document.addEventListener('mousemove', function(e) {
         if (!isDraggingImg || !dragTarget) return;
         let dx = e.clientX - startX;
@@ -716,7 +834,6 @@
         dragTarget.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale || 1})`;
     });
 
-    // 드래그 종료 및 사진 틀 크기(resize) 상태 업데이트
     document.addEventListener('mouseup', function(e) {
         if (isDraggingImg && dragTarget) {
             dragTarget.style.cursor = 'grab';
@@ -724,7 +841,6 @@
             dragTarget = null;
         }
         
-        // 사진틀 크기(모서리 드래그)가 변경되었다면 저장
         document.querySelectorAll('.wiki-resizable-wrap').forEach(wrap => {
             let secId = wrap.dataset.secid;
             let idx = wrap.dataset.imgidx;
@@ -740,10 +856,9 @@
         });
     });
 
-    // 사진 부분 확대 (마우스 휠)
     document.addEventListener('wheel', function(e) {
         if (e.target.classList.contains('wiki-panzoom-img')) {
-            e.preventDefault(); // 스크롤 방지
+            e.preventDefault(); 
             let type = e.target.dataset.type;
             let state;
             if (type === 'profile') state = profileTransform;
@@ -763,6 +878,15 @@
 
 
     window.onload = function() {
+        // 기존에 임시저장된 데이터가 있는지 확인
+        if (localStorage.getItem('kxxchowiki_draft')) {
+            if (confirm('이전에 임시 저장된 데이터가 있습니다! 이어서 작성하시겠습니까?\n(취소를 누르면 초기 예시 화면이 나타납니다)')) {
+                loadDraft();
+                return; // 불러왔다면 예시 데이터 로딩 생략
+            }
+        }
+
+        // --- 초기 예시 데이터 로딩 ---
         addInfoRow("항목명 1", "여기에 프로필 정보를 입력하세요 [각주:각주 예시]");
         addInfoRow("항목명 2", "왼쪽 버튼으로 계속 추가 가능합니다! 제한 X");
 
@@ -771,7 +895,7 @@
         addSectionUI({ 
             level: 1, 
             title: "1단계 문단 제목", 
-            content: "[사진:1|커미션] [인용구:원문 대사 예시|이곳은 번역이나 상세 설명이 들어가는 칸]\n\n예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력"     
+            content: "[사진:1|출처입력]\n\n[굵게:예시 텍스트를 강조합니다] 일반 텍스트 [링크:이곳을 클릭하면 링크로 이동합니다|https://google.com]\n원하는 색상으로 텍스트를 바꿀 수 있습니다 -◡- [색상: 예시 색상 텍스트|#008275]"     
         }, [dummy1]);
         
         addSectionUI({     
