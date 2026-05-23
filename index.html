@@ -67,20 +67,25 @@
             <span style="color: #888;">에디터 사용 금지 드림) 사카모토 데이즈 ㅡ 나구모 요이치 </span><br><br>
                만들고 인용으로 자랑해주시면 정말... 좋아합니다<br>
                매번 인용으로 자랑해주시는 분들께 감사하고 있어요  (⸝⸝๑  ̫ ๑⸝⸝⸝) <br>
-               쓰실 때 모카 900일 축하해 한번씩 해주시면 너무 감사하겠습니다...(>⸝⸝⸝<) <br>
+               
             
             <hr style="border:0; border-top:1px solid #eee; margin:12px 0;">
                <span style="color: #008275;">1차 수정!!!</span> 사진 자유 크기 조절 & 위치 맞춤 기능 (๑ ⩊ ๑)<br>
                <span style="color: #008275;">2차 수정!!!</span> 티스토리 미사용을 위해 사진 저장 기능(⁃ ⩊ ⁃)<br>
-               <span style="color: #008275;">3차 수정!!!</span> 저장/불러오기 기능 및 텍스트 꾸미기 기능 (ᴖ⩊ᴖ)
+               <span style="color: #008275;">3차 수정!!!</span> 저장/불러오기 기능 및 텍스트 꾸미기 기능 (ᴖ⩊ᴖ)<br>
+               <span style="color: #008275;">4차 수정!!!</span> 스포일러, 아이콘, 항목 및 본문 문단 드래그 순서 변경 기능<br>
+               <span style="color: #008275;">5차 수정!!!</span> 복사 붙여넣기 오류 수정 및 화면 깨짐 오류 수정<br>
+               <span style="color: #008275;">6차 수정!!!</span> 표 생성기 및 셀별 색상 지정 기능 추가!
             <hr style="border:0; border-top:1px solid #eee; margin:12px 0;">
             <b>특수 태그 사용 안내</b>
             <ul>
-                <li><b>각주 달기</b>: 문장 뒤에 <code>[각주:설명내용]</code>을 적으면 실시간으로 각주 번호가 부여되며 팝업 및 하단 목록이 자동 생성됩니다. </li>
+                <li><b>각주 달기</b>: 문장 뒤에 <code>[각주:설명내용]</code>을 적으면 실시간으로 팝업/목록이 생성됩니다. </li>
+                <li><b>스포일러</b>: <code>[스포일러:내용]</code>을 적으면 각주와 동일한 기능으로 파란색 [스포일러] 글씨가 표시됩니다!</li>
+                <li><b>아이콘 삽입</b>: 아이콘 파일을 등록하고 <code>[아이콘:1]</code> 형태로 본문이나 표 내용에 삽입할 수 있습니다.</li>
+                <li><b>사진 삽입</b>: 문단 내 사진 업로드는 원하는 위치에 <code>[사진:1]</code>, <code>[사진:2]</code> 를 기입하면 됩니다!</li>
+                <li><b>표 삽입</b>: 가이드 아래의 <b>[표 관리소]</b>에서 표를 만들고, 본문에 <code>[표:1]</code>을 적어 매칭하세요!</li>
                 <li><b>인용구 틀</b>: 대사나 강조 구절은 <code>[인용구:원문대사|번역설명]</code> 태그를 사용해 인용구 틀을 끼울 수 있습니다.</li>
-                <li><b>사진 삽입</b>: 문단 내 사진 업로드는 원하는 위치에 <code>[사진:1]</code>, <code>[사진:2]</code> 를 기입하면 됩니다! 공백없이 붙여쓰면 가로 배열로 적용됩니다.</li>
                 <li><b>텍스트 스타일</b>: <code>[굵게:강조할내용]</code>, <code>[링크:클릭할텍스트|https://이동할주소]</code>, <code>[색상:색칠할내용|#ff0000]</code> 등을 통해 텍스트를 꾸밀 수 있습니다.</li>
-                <li><b>티스토리 기준</b>: 토글 기능이 있습니다! 목차에 하이퍼링크가 달려 있어 목차에서 항목 선택 시 이동 가능 + 각 문단별 접기 펼치기 기능 모두 지원하고 있습니다 (^ヮ^)</li>
             </ul>
         </div>
         <button class="btn-modal-close" onclick="closeWelcomeModal()">에디터 시작하기</button>
@@ -150,8 +155,16 @@
                 </div>
             </div>
 
+            <div class="input-grp" style="background: #e8f5e9; padding: 10px; border-radius: 6px; margin-bottom: 15px; border: 1px dashed #008275;">
+                <label style="color: #004d40; margin-bottom: 6px;">아이콘 등록 (파일 여러 개 동시 선택 가능)</label>
+                <input type="file" multiple accept="image/*" id="in-info-icon-files" onchange="handleGlobalIconFiles(this)" style="display:none;">
+                <button type="button" class="btn-add" onclick="document.getElementById('in-info-icon-files').click()" style="margin: 0; padding: 6px 12px; background: #fff; border: 1px solid #008275; width: auto; font-size: 12px;">+ 아이콘 파일 추가하기</button>
+                <div class="img-manage-list" id="global-icon-list" style="margin-top: 8px; border: none; padding: 0;"></div>
+                <div style="font-size: 11px; color: #666; margin-top: 8px;">* 파일 등록 후 표 내용에 <code>[아이콘:1]</code>, <code>[아이콘:2]</code> 처럼 적어주시면 이미지가 쏙 들어갑니다!</div>
+            </div>
+
             <div class="input-grp">
-                <label>표 내용 (항목과 내용)</label>
+                <label>표 내용 (좌측 ≡ 아이콘을 드래그해 순서를 바꿀 수 있습니다!)</label>
                 <div id="info-rows-container"></div>
                 <button type="button" class="btn-add" onclick="addInfoRow()">+ 항목 한 줄 추가</button>
             </div>
@@ -160,10 +173,18 @@
         <div class="section-head">3. 본문 작성 (목차 및 내용)</div>
         <div style="font-size: 12px; color: #666; margin-bottom: 10px; line-height: 1.5; background: #e8f5e9; padding: 10px; border-radius: 6px;">
             <b>본문 특수 태그 가이드</b><br>
-            ➀ 각주: <code>[각주:설명내용]</code><br>
+            ➀ 각주: <code>[각주:설명내용]</code> &nbsp;|&nbsp; 스포일러: <code>[스포일러:내용]</code><br>
             ➁ 인용구: <code>[인용구:원문대사|번역설명]</code><br>
-            ➂ 사진: <code>[사진:1|출처]</code> (사진 클릭 후 드래그/휠로 조절!)<br>
-            ➃ 글씨: <code>[굵게:내용]</code>, <code>[링크:텍스트|URL]</code>, <code>[색상:내용|#HEX코드]</code>
+            ➂ 미디어: <code>[사진:1]</code> (우측 출처입력시: <code>[사진:1|출처]</code>), <code>[아이콘:1]</code><br>
+            ➃ 글씨: <code>[굵게:내용]</code>, <code>[링크:텍스트|URL]</code>, <code>[색상:내용|#HEX코드]</code><br>
+            ➄ 표 삽입: 본문에 <code>[표:1]</code>, <code>[표:2]</code> 를 적고 <b>아래 '표 생성기'</b>에서 표를 작성하세요!
+        </div>
+
+        <div class="input-grp" style="background: #fff; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+            <label style="color: #008275; margin-bottom: 6px; font-size: 14px;">본문 표 생성기</label>
+            <div style="font-size: 11px; color: #666; margin-bottom: 10px;">* 아래에서 표를 만들고 본문에 <code>[표:1]</code>, <code>[표:2]</code> 를 입력하면 해당 위치에 매칭되어 표시됩니다!</div>
+            <div id="global-table-list"></div>
+            <button type="button" class="btn-add" onclick="addGlobalTable()" style="margin: 0; padding: 8px 12px; background: #e0f2f1; border: 1px dashed #008275; width: 100%; font-size: 12px; color: #008275;">+ 새로운 표 만들기</button>
         </div>
         
         <div id="sections-container"></div>
@@ -194,7 +215,7 @@
         document.getElementById('welcomeModal').style.display = 'none';
     }
 
-    // --- 확대/이동 상태 저장 변수들 ---
+    // --- 상태 저장 변수들 ---
     let srcProfileImg = "https://via.placeholder.com/300x380/eee/999?text=Profile+Image";
     let profileTransform = { x: 0, y: 0, scale: 1 };
     
@@ -202,6 +223,8 @@
     let extraTransform = { x: 0, y: 0, scale: 1 };
 
     let sectionImagesStorage = {}; 
+    let globalTablesStorage = []; // 본문 표 관리 글로벌 스토리지
+    let globalIconStorage = []; 
 
     function handleProfileImage(input) {
         const file = input.files[0];
@@ -232,9 +255,255 @@
         }
     }
 
-    function triggerSecImageUpload(secId) {
-        document.getElementById('file-input-' + secId).click();
+    // --- 글로벌 아이콘 처리 함수 ---
+    function handleGlobalIconFiles(input) {
+        const files = input.files;
+        if(files.length === 0) return;
+        let processed = 0;
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                globalIconStorage.push(e.target.result);
+                processed++;
+                if (processed === files.length) {
+                    input.value = "";
+                    renderGlobalIconList();
+                    updatePreview();
+                }
+            };
+            reader.readAsDataURL(file);
+        });
     }
+
+    function renderGlobalIconList() {
+        const container = document.getElementById('global-icon-list');
+        container.innerHTML = '';
+        if (globalIconStorage.length === 0) {
+            container.innerHTML = '<div style="color:#aaa; font-size:11px; text-align:center; padding:5px; border: 1px dashed #ccc; border-radius: 4px;">등록된 아이콘이 없습니다.</div>';
+            return;
+        }
+        globalIconStorage.forEach((src, idx) => {
+            const item = document.createElement('div');
+            item.className = 'img-manage-item';
+            item.innerHTML = `
+                <img src="${src}" style="width:24px; height:24px;">
+                <span style="flex:1; font-weight:bold; color:#008275;">[아이콘:${idx + 1}] 매칭</span>
+                <button type="button" onclick="removeGlobalIcon(${idx})" style="background:#ff4d4f; color:white; border:none; padding:3px 6px; border-radius:3px; cursor:pointer; font-weight:bold;">지우기</button>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function removeGlobalIcon(idx) {
+        globalIconStorage.splice(idx, 1);
+        renderGlobalIconList();
+        updatePreview();
+    }
+
+
+    // --- 표 항목 드래그 앤 드롭 함수들 ---
+    let dragRowItem = null;
+    function dragStartRow(e) {
+        dragRowItem = e.currentTarget;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(() => { dragRowItem.style.opacity = '0.4'; }, 0);
+    }
+    function dragOverRow(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+    function dragEnterRow(e) {
+        e.preventDefault();
+        const target = e.currentTarget;
+        if (target !== dragRowItem) {
+            target.style.border = '2px dashed #008275';
+        }
+    }
+    function dragLeaveRow(e) { e.currentTarget.style.border = '1px solid transparent'; }
+    function dropRow(e) {
+        e.preventDefault();
+        const target = e.currentTarget;
+        target.style.border = '1px solid transparent';
+        if (dragRowItem && dragRowItem !== target) {
+            const container = target.parentNode;
+            const siblings = Array.from(container.children);
+            const sourceIdx = siblings.indexOf(dragRowItem);
+            const targetIdx = siblings.indexOf(target);
+            if (sourceIdx < targetIdx) {
+                container.insertBefore(dragRowItem, target.nextSibling);
+            } else {
+                container.insertBefore(dragRowItem, target);
+            }
+        }
+    }
+    function dragEndRow(e) {
+        if(dragRowItem) dragRowItem.style.opacity = '1';
+        document.querySelectorAll('.info-row-item').forEach(el => { el.style.border = '1px solid transparent'; });
+        dragRowItem = null;
+        updatePreview();
+    }
+
+    function addInfoRow(k = '', v = '', savedId = null) {
+        const id = savedId || 'info-' + Date.now() + Math.floor(Math.random()*100);
+        
+        const html = `
+            <div class="info-row-item" id="${id}" draggable="true" ondragstart="dragStartRow(event)" ondragover="dragOverRow(event)" ondragenter="dragEnterRow(event)" ondragleave="dragLeaveRow(event)" ondrop="dropRow(event)" ondragend="dragEndRow(event)" style="display:flex; gap:5px; margin-bottom:8px; align-items: flex-start; padding: 4px; border: 1px solid transparent; border-radius: 6px; background: #fff;">
+                <div style="cursor: grab; padding: 8px 2px; color: #aaa; user-select: none;" title="드래그해서 순서 변경">≡</div>
+                <input type="text" class="info-k" value="${k}" placeholder="항목명" style="width:75px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" oninput="updatePreview()">
+                <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+                    <textarea class="info-v" placeholder="내용 [아이콘:1] 사용 가능" style="width:100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; height: 35px; resize: vertical;" oninput="updatePreview()">${v}</textarea>
+                </div>
+                <button type="button" onclick="document.getElementById('${id}').remove(); updatePreview();" style="background:#ff4d4f; color:white; border:none; padding:8px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">X</button>
+            </div>
+        `;
+        document.getElementById('info-rows-container').insertAdjacentHTML('beforeend', html);
+    }
+
+    // --- 본문 문단 드래그 앤 드롭 함수들 ---
+    let dragSecItem = null;
+    function dragStartSec(e) {
+        dragSecItem = e.currentTarget;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(() => { dragSecItem.style.opacity = '0.4'; }, 0);
+    }
+    function dragOverSec(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+    function dragEnterSec(e) {
+        e.preventDefault();
+        const target = e.currentTarget;
+        if (target !== dragSecItem) {
+            target.style.border = '2px dashed #008275';
+        }
+    }
+    function dragLeaveSec(e) { e.currentTarget.style.border = '1px solid #ddd'; }
+    function dropSec(e) {
+        e.preventDefault();
+        const target = e.currentTarget;
+        target.style.border = '1px solid #ddd';
+        if (dragSecItem && dragSecItem !== target) {
+            const container = target.parentNode;
+            const siblings = Array.from(container.children);
+            const sourceIdx = siblings.indexOf(dragSecItem);
+            const targetIdx = siblings.indexOf(target);
+            if (sourceIdx < targetIdx) {
+                container.insertBefore(dragSecItem, target.nextSibling);
+            } else {
+                container.insertBefore(dragSecItem, target);
+            }
+            updatePreview();
+        }
+    }
+    function dragEndSec(e) {
+        if(dragSecItem) dragSecItem.style.opacity = '1';
+        document.querySelectorAll('.section-block').forEach(el => el.style.border = '1px solid #ddd');
+        dragSecItem = null;
+    }
+
+
+    // --- 글로벌 시각적 표(Table) 생성기 함수들 ---
+    function addGlobalTable() {
+        const globalBg = document.getElementById('in-color').value;
+        const globalTxt = document.getElementById('in-text-color').value;
+        
+        // 초기 기본 표 생성 (2x2)
+        const newTable = [
+            [ {v: '제목1', bg: globalBg, c: globalTxt, bd: '#cccccc'}, {v: '제목2', bg: globalBg, c: globalTxt, bd: '#cccccc'} ],
+            [ {v: '내용1', bg: '#ffffff', c: '#333333', bd: '#cccccc'}, {v: '내용2', bg: '#ffffff', c: '#333333', bd: '#cccccc'} ]
+        ];
+        globalTablesStorage.push(newTable);
+        renderGlobalTables();
+        updatePreview();
+    }
+
+    function updateTableCell(tIdx, rIdx, cIdx, field, val) {
+        globalTablesStorage[tIdx][rIdx][cIdx][field] = val;
+        updatePreview();
+    }
+
+    function addTableRow(tIdx) {
+        const table = globalTablesStorage[tIdx];
+        const cols = table[0].length;
+        const newRow = [];
+        for(let i=0; i<cols; i++) newRow.push({v: '', bg: '#ffffff', c: '#333333', bd: '#cccccc'});
+        table.push(newRow);
+        renderGlobalTables();
+        updatePreview();
+    }
+    
+    function removeTableRow(tIdx) {
+        const table = globalTablesStorage[tIdx];
+        if (table.length > 1) { table.pop(); renderGlobalTables(); updatePreview(); }
+    }
+    
+    function addTableCol(tIdx) {
+        const table = globalTablesStorage[tIdx];
+        const globalBg = document.getElementById('in-color').value;
+        const globalTxt = document.getElementById('in-text-color').value;
+        table.forEach((row, rIdx) => {
+            if(rIdx === 0) row.push({v: '제목', bg: globalBg, c: globalTxt, bd: '#cccccc'});
+            else row.push({v: '내용', bg: '#ffffff', c: '#333333', bd: '#cccccc'});
+        });
+        renderGlobalTables();
+        updatePreview();
+    }
+    
+    function removeTableCol(tIdx) {
+        const table = globalTablesStorage[tIdx];
+        if (table[0].length > 1) {
+            table.forEach(row => row.pop());
+            renderGlobalTables();
+            updatePreview();
+        }
+    }
+    
+    function removeGlobalTable(tIdx) {
+        globalTablesStorage.splice(tIdx, 1);
+        renderGlobalTables();
+        updatePreview();
+    }
+
+    function renderGlobalTables() {
+        const container = document.getElementById('global-table-list');
+        if(!container) return;
+        container.innerHTML = '';
+        
+        globalTablesStorage.forEach((tableData, tIdx) => {
+            const wrap = document.createElement('div');
+            wrap.style = "border: 2px dashed #008275; padding: 10px; border-radius: 6px; margin-bottom: 15px; background: #fafafa;";
+            
+            let html = `<div style="display:flex; justify-content:space-between; margin-bottom:8px; align-items:center;">
+                <span style="font-weight:bold; color:#008275; font-size:14px; background: #e0f2f1; padding: 4px 8px; border-radius: 4px;">[표:${tIdx + 1}]</span>
+                <button type="button" onclick="removeGlobalTable(${tIdx})" style="background:#ff4d4f; color:white; border:none; padding:4px 8px; border-radius:4px; font-size:11px; font-weight:bold; cursor:pointer;">표 전체 삭제</button>
+            </div>`;
+            
+            html += `<div style="overflow-x:auto;"><table style="border-collapse: collapse; min-width: 100%;">`;
+            tableData.forEach((row, rIdx) => {
+                html += `<tr>`;
+                row.forEach((cell, cIdx) => {
+                    html += `<td style="border:1px solid #ddd; padding:4px; min-width:120px; background:#fff;">
+                        <textarea oninput="updateTableCell(${tIdx}, ${rIdx}, ${cIdx}, 'v', this.value)" style="width:100%; height:45px; box-sizing:border-box; border:1px solid #ccc; border-radius:4px; padding:6px; margin-bottom:6px; font-size:12px; resize:vertical;" placeholder="내용">${cell.v}</textarea>
+                        <div style="display:flex; gap:4px; justify-content:center;">
+                            <label style="font-size:10px; color:#666; display:flex; flex-direction:column; align-items:center; cursor:pointer;">배경<input type="color" value="${cell.bg}" oninput="updateTableCell(${tIdx}, ${rIdx}, ${cIdx}, 'bg', this.value)" style="width:20px; height:20px; padding:0; border:none; cursor:pointer; margin-top:2px;"></label>
+                            <label style="font-size:10px; color:#666; display:flex; flex-direction:column; align-items:center; cursor:pointer;">글자<input type="color" value="${cell.c}" oninput="updateTableCell(${tIdx}, ${rIdx}, ${cIdx}, 'c', this.value)" style="width:20px; height:20px; padding:0; border:none; cursor:pointer; margin-top:2px;"></label>
+                            <label style="font-size:10px; color:#666; display:flex; flex-direction:column; align-items:center; cursor:pointer;">테두리<input type="color" value="${cell.bd}" oninput="updateTableCell(${tIdx}, ${rIdx}, ${cIdx}, 'bd', this.value)" style="width:20px; height:20px; padding:0; border:none; cursor:pointer; margin-top:2px;"></label>
+                        </div>
+                    </td>`;
+                });
+                html += `</tr>`;
+            });
+            html += `</table></div>`;
+            
+            html += `<div style="margin-top:10px; display:flex; gap:5px;">
+                <button type="button" onclick="addTableRow(${tIdx})" style="font-size:12px; padding:6px 12px; border:1px solid #008275; background:#fff; color:#008275; border-radius:4px; cursor:pointer; font-weight:bold;">+ 행 추가</button>
+                <button type="button" onclick="removeTableRow(${tIdx})" style="font-size:12px; padding:6px 12px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer;">- 행 삭제</button>
+                <button type="button" onclick="addTableCol(${tIdx})" style="font-size:12px; padding:6px 12px; border:1px solid #008275; background:#fff; color:#008275; border-radius:4px; cursor:pointer; font-weight:bold;">+ 열 추가</button>
+                <button type="button" onclick="removeTableCol(${tIdx})" style="font-size:12px; padding:6px 12px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer;">- 열 삭제</button>
+            </div>`;
+            
+            wrap.innerHTML = html;
+            container.appendChild(wrap);
+        });
+    }
+
+    function triggerSecImageUpload(secId) { document.getElementById('file-input-' + secId).click(); }
 
     function handleSecImageFiles(input, secId) {
         if (!sectionImagesStorage[secId]) sectionImagesStorage[secId] = [];
@@ -246,8 +515,7 @@
             const reader = new FileReader();
             reader.onload = e => {
                 sectionImagesStorage[secId].push({
-                    src: e.target.result,
-                    w: '100%', h: 'auto', x: 0, y: 0, scale: 1 
+                    src: e.target.result, w: '100%', h: 'auto', x: 0, y: 0, scale: 1 
                 }); 
                 processed++;
                 if (processed === files.length) {
@@ -270,6 +538,7 @@
 
     function renderImgManagementList(secId) {
         const container = document.getElementById('img-list-' + secId);
+        if(!container) return;
         container.innerHTML = '';
         const imgs = sectionImagesStorage[secId] || [];
         if (imgs.length === 0) {
@@ -289,22 +558,9 @@
         });
     }
 
-    function addInfoRow(k = '', v = '') {
-        const id = 'info-' + Date.now() + Math.floor(Math.random()*100);
-        const html = `
-            <div class="info-row-item" id="${id}" style="display:flex; gap:5px; margin-bottom:8px; align-items: flex-start;">
-                <input type="text" class="info-k" value="${k}" placeholder="항목명" style="width:80px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" oninput="updatePreview()">
-                <textarea class="info-v" placeholder="내용" style="flex:1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; height: 35px; resize: vertical;" oninput="updatePreview()">${v}</textarea>
-                <button onclick="document.getElementById('${id}').remove(); updatePreview();" style="background:#ff4d4f; color:white; border:none; padding:8px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">X</button>
-            </div>
-        `;
-        document.getElementById('info-rows-container').insertAdjacentHTML('beforeend', html);
-    }
-
     function addSectionUI(sec = {level: 1, title: "", content: ""}, initialImgs = []) {
         const id = 'sec-' + Date.now() + Math.floor(Math.random() * 1000);
         
-        // 초기 더미데이터 호환용
         const initialImgsObj = initialImgs.map(img => {
             if (typeof img === 'string') return { src: img, w: '100%', h: 'auto', x: 0, y: 0, scale: 1 };
             return img;
@@ -312,20 +568,23 @@
         sectionImagesStorage[id] = initialImgsObj; 
 
         const html = `
-            <div class="section-block" id="${id}" style="background: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
-                <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+            <div class="section-block" id="${id}" ondragstart="dragStartSec(event)" ondragover="dragOverSec(event)" ondragenter="dragEnterSec(event)" ondragleave="dragLeaveSec(event)" ondrop="dropSec(event)" ondragend="dragEndSec(event)" style="background: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                <div style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center;">
+                    <div style="cursor: grab; padding: 0 4px; color: #aaa; user-select: none; font-size: 16px;" title="드래그해서 순서 변경" onmousedown="document.getElementById('${id}').setAttribute('draggable', 'true')" onmouseup="document.getElementById('${id}').removeAttribute('draggable')" onmouseleave="document.getElementById('${id}').removeAttribute('draggable')">≡</div>
                     <select class="sec-level" onchange="updatePreview()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-weight: bold;">
                         <option value="1" ${sec.level === 1 ? 'selected' : ''}>1단계 (1.)</option>
                         <option value="2" ${sec.level === 2 ? 'selected' : ''}>2단계 (1.1.)</option>
                         <option value="3" ${sec.level === 3 ? 'selected' : ''}>3단계 (1.1.1.)</option>
                     </select>
                     <input type="text" class="sec-title" value="${sec.title}" oninput="updatePreview()" placeholder="문단 제목" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                    <button onclick="delete sectionImagesStorage['${id}']; document.getElementById('${id}').remove(); updatePreview();" style="background: #ff4d4f; color: white; border: none; padding: 0 10px; border-radius: 4px; cursor: pointer; font-weight: bold;">삭제</button>
+                    <button type="button" onclick="delete sectionImagesStorage['${id}']; document.getElementById('${id}').remove(); updatePreview();" style="background: #ff4d4f; color: white; border: none; padding: 0 10px; border-radius: 4px; cursor: pointer; font-weight: bold;">삭제</button>
                 </div>
-                <textarea class="sec-content" oninput="updatePreview()" placeholder="문단 내용 입력. [각주:내용], [인용구:내용], [사진:1] 사용 가능" style="width: 100%; height: 80px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px; resize: vertical; box-sizing: border-box;">${sec.content}</textarea>
+                <textarea class="sec-content" oninput="updatePreview()" placeholder="문단 내용 입력. [각주:내용], [스포일러:내용], [사진:1], [아이콘:1], [표:1] 사용 가능" style="width: 100%; height: 80px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px; resize: vertical; box-sizing: border-box;">${sec.content}</textarea>
                 
+                <div style="display:flex; gap:8px;">
+                    <button type="button" class="btn-add" onclick="triggerSecImageUpload('${id}')" style="margin: 0; padding: 6px 12px; background: #fff; border: 1px solid #008275; width: auto; font-size: 12px;">+ 사진 추가하기</button>
+                </div>
                 <input type="file" multiple accept="image/*" id="file-input-${id}" onchange="handleSecImageFiles(this, '${id}')" style="display:none;">
-                <button type="button" class="btn-add" onclick="triggerSecImageUpload('${id}')" style="margin: 0; padding: 6px 12px; background: #fff; border: 1px solid #008275; width: auto; font-size: 12px;">+ 사진 추가하기 (기존 사진 유지됨)</button>
                 <div class="img-manage-list" id="img-list-${id}"></div>
             </div>
         `;
@@ -355,9 +614,10 @@
 
         let infoRows = [];
         document.querySelectorAll('.info-row-item').forEach(row => {
+            const id = row.id;
             const k = row.querySelector('.info-k').value;
             const v = row.querySelector('.info-v').value;
-            if (k || v) infoRows.push({ k, v });
+            if (k || v) infoRows.push({ id, k, v });
         });
 
         let sections = [];
@@ -378,15 +638,32 @@
         function parseText(text, secImages = [], secId = '') {
             let html = text.replace(/\n/g, '<br>');
 
-            // --- 새로 추가된 텍스트 꾸미기 파서 ---
-            // 굵게
             html = html.replace(/\[굵게:(.*?)\]/g, '<strong style="font-weight: 900;">$1</strong>');
-            // 링크
             html = html.replace(/\[링크:(.*?)\|([^\]]+)\]/g, '<a href="$2" target="_blank" style="color: #0275d8; text-decoration: underline;">$1</a>');
-            // 색상
             html = html.replace(/\[색상:(.*?)\|([^\]]+)\]/g, '<span style="color: $2;">$1</span>');
-            // ------------------------------------
             
+            // --- 글로벌 시각적 표(Table) 매칭 파서 ---
+            html = html.replace(/\[표:(\d+)\]/g, function(match, tIdxStr) {
+                let idx = parseInt(tIdxStr) - 1;
+                let tData = globalTablesStorage[idx];
+                if (!tData) return `[표:${tIdxStr} 없음]`;
+                
+                let tHtml = '<div style="overflow-x: auto; margin: 15px 0;"><table style="width: 100%; border-collapse: collapse; font-size: 0.9em; min-width: 300px;">';
+                tData.forEach((row, rIdx) => {
+                    tHtml += '<tr>';
+                    row.forEach((cell, cIdx) => {
+                        let cellTag = rIdx === 0 ? 'th' : 'td';
+                        let fw = rIdx === 0 ? 'font-weight:bold;' : '';
+                        let content = cell.v.replace(/\n/g, '<br>');
+                        tHtml += `<${cellTag} style="border: 1px solid ${cell.bd}; padding: 8px; background-color: ${cell.bg}; color: ${cell.c}; text-align: center; word-break: break-word; ${fw}">${content}</${cellTag}>`;
+                    });
+                    tHtml += '</tr>';
+                });
+                tHtml += '</table></div>';
+                return tHtml;
+            });
+
+            // --- 인용구 파서 ---
             html = html.replace(/\[인용구:([^\]|]+)(?:\|([^\]]+))?\]/g, function(match, mainText, subText) {
                 let qHtml = `<div style="border-left: 3px solid ${color}; background-color: #f9f9f9; padding: 10px 15px; margin-bottom: 6px; font-family: 'Noto Sans JP', 'Pretendard', sans-serif; font-size: 0.85em; width: auto; max-width: 100%; box-sizing: border-box;">`;
                 if (subText) {
@@ -398,11 +675,27 @@
                 return qHtml;
             });
 
+            // --- 각주 파서 ---
             html = html.replace(/\[각주:(.*?)\]/g, function(match, fnContent) {
                 let fnHtml = `<span class="footnote-container" tabindex="0"><span class="footnote-text">[${fnIndex}]</span><span class="footnote-content"><span class="fn-num">[${fnIndex}]</span> ${fnContent}<span class="fn-close-hint">닫으려면 바깥을 클릭하세요</span></span></span>`;
                 footnotesList.push({ num: fnIndex, content: fnContent });
                 fnIndex++;
                 return fnHtml;
+            });
+
+            // --- 스포일러 파서 ---
+            html = html.replace(/\[스포일러:(.*?)\]/g, function(match, fnContent) {
+                let fnHtml = `<span class="footnote-container" tabindex="0"><span class="footnote-text">[스포일러]</span><span class="footnote-content"><span class="fn-num">[스포일러]</span> ${fnContent}<span class="fn-close-hint">닫으려면 바깥을 클릭하세요</span></span></span>`;
+                return fnHtml;
+            });
+
+            // --- 아이콘 파일 매칭 파서 ---
+            html = html.replace(/\[아이콘:(\d+)\]/g, function(match, indexStr) {
+                let idx = parseInt(indexStr) - 1;
+                if (globalIconStorage[idx]) {
+                    return `<img src="${globalIconStorage[idx]}" style="max-width:35px; max-height:35px; vertical-align:middle; border-radius:4px; margin: 0 2px; display:inline-block;" alt="아이콘">`;
+                }
+                return `[아이콘:${indexStr} 없음]`;
             });
 
             let usedImageIndices = new Set();
@@ -436,7 +729,6 @@
                 return groupHtml;
             });
 
-            // 단독 사진 렌더링
             html = html.replace(/\[사진:(\d+)(?:\|([^\]]+))?\]/g, function(match, indexStr, sourceText) {
                 let idx = parseInt(indexStr) - 1;
                 let source = sourceText ? sourceText.trim() : "";
@@ -473,7 +765,8 @@
 
         let infoRowsHtml = '';
         infoRows.forEach(row => {
-            infoRowsHtml += `<tr><td style="background-color: ${color}; color: ${textColor}; width: 30%; padding: 6px 4px; font-weight: bold; text-align: center; border: 1px solid #bbb;">${row.k}</td><td style="padding: 6px 8px; border: 1px solid #bbb; word-break: break-all;">${parseText(row.v).parsedHtml}</td></tr>`;
+            let parsedV = parseText(row.v).parsedHtml;
+            infoRowsHtml += `<tr><td style="background-color: ${color}; color: ${textColor}; width: 30%; padding: 6px 4px; font-weight: bold; text-align: center; border: 1px solid #bbb;">${row.k}</td><td style="padding: 6px 8px; border: 1px solid #bbb; word-break: break-all; vertical-align: middle;">${parsedV}</td></tr>`;
         });
 
         let tocHtml = `<ul style="list-style: none; padding: 0; margin: 0;">`;
@@ -659,26 +952,21 @@
    function copyHTML() {
         const finalHtml = generateFullHTML();
 
-        // 1. 최신 브라우저 및 보안 환경(HTTPS)인 경우
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(finalHtml).then(() => {
                 alert("복사되었습니다! ( ᴗ ̫ ᴗ )");
             }).catch(err => {
-                // 실패 시 구형 방식으로 재시도
                 fallbackCopyTextToClipboard(finalHtml);
             });
         } else {
-            // 2. 모바일 인앱 브라우저나 HTTP 환경인 경우 구형 방식 사용
             fallbackCopyTextToClipboard(finalHtml);
         }
     }
 
-    // 모바일/구형 브라우저용 복사 우회 함수
     function fallbackCopyTextToClipboard(text) {
         const textArea = document.createElement("textarea");
         textArea.value = text;
         
-        // 화면이 아래로 튀는 현상을 방지하기 위한 스타일 설정
         textArea.style.top = "0";
         textArea.style.left = "0";
         textArea.style.position = "fixed";
@@ -686,7 +974,6 @@
 
         document.body.appendChild(textArea);
         
-        // 모바일(iOS) 환경에서 복사를 위한 선택 처리
         textArea.focus();
         textArea.select();
         
@@ -730,6 +1017,7 @@
             let infoRows = [];
             document.querySelectorAll('.info-row-item').forEach(row => {
                 infoRows.push({
+                    id: row.id,
                     k: row.querySelector('.info-k').value,
                     v: row.querySelector('.info-v').value
                 });
@@ -737,8 +1025,9 @@
 
             let sections = [];
             document.querySelectorAll('.section-block').forEach(block => {
+                const id = block.id;
                 sections.push({
-                    id: block.id,
+                    id: id,
                     level: parseInt(block.querySelector('.sec-level').value),
                     title: block.querySelector('.sec-title').value,
                     content: block.querySelector('.sec-content').value
@@ -763,7 +1052,9 @@
                 profileTransform: profileTransform,
                 srcExtraImg: srcExtraImg,
                 extraTransform: extraTransform,
-                sectionImagesStorage: sectionImagesStorage
+                sectionImagesStorage: sectionImagesStorage,
+                globalTablesStorage: globalTablesStorage,
+                globalIconStorage: globalIconStorage
             };
 
             localStorage.setItem('kxxchowiki_draft', JSON.stringify(draft));
@@ -800,11 +1091,15 @@
             srcExtraImg = draft.srcExtraImg || "";
             extraTransform = draft.extraTransform || { x: 0, y: 0, scale: 1 };
             sectionImagesStorage = draft.sectionImagesStorage || {};
+            globalTablesStorage = draft.globalTablesStorage || [];
+            globalIconStorage = draft.globalIconStorage || [];
 
-            // 기존 행과 섹션 초기화
+            renderGlobalIconList();
+            renderGlobalTables();
+
             document.getElementById('info-rows-container').innerHTML = '';
             if (draft.infoRows) {
-                draft.infoRows.forEach(row => addInfoRow(row.k, row.v));
+                draft.infoRows.forEach(row => addInfoRow(row.k, row.v, row.id));
             }
 
             document.getElementById('sections-container').innerHTML = '';
@@ -918,24 +1213,33 @@
 
 
     window.onload = function() {
-        // 기존에 임시저장된 데이터가 있는지 확인
         if (localStorage.getItem('kxxchowiki_draft')) {
             if (confirm('이전에 임시 저장된 데이터가 있습니다! 이어서 작성하시겠습니까?\n(취소를 누르면 초기 예시 화면이 나타납니다)')) {
                 loadDraft();
-                return; // 불러왔다면 예시 데이터 로딩 생략
+                return;
             }
         }
 
         // --- 초기 예시 데이터 로딩 ---
-        addInfoRow("항목명 1", "여기에 프로필 정보를 입력하세요 [각주:각주 예시]");
-        addInfoRow("항목명 2", "왼쪽 버튼으로 계속 추가 가능합니다! 제한 X [각주:900일 축하해]");
-        addInfoRow("항목명 3", "가벼운 축하 한마디 해주시면 정말 기뻐요  ⁃ ⩊ ⁃ [각주:매일의 내일을 함께할 우리의 기억이 꼭 닮았으면 좋겠다]");
+        addInfoRow("항목명 1", "여기에 프로필 정보를 입력하세요 [각주:각주 기능]");
+        addInfoRow("항목명 2", "왼쪽 버튼으로 계속 추가 가능합니다! 제한 X [각주:사용해주시는 모든 분들에게 감사드립니다!]");
+        addInfoRow("항목명 3", "위쪽 [아이콘 파일 추가하기]에 이미지를 넣고 [아이콘:1] 이렇게 매칭할 수 있어요");
+        addInfoRow("항목명 4", "스포일러 텍스트 추가 기능 << new! [스포일러:여기는 숨겨진 내용입니다. 스포일러 내용을 적으시면 됩니다]");
+
         const dummy1 = "https://via.placeholder.com/150x150/008275/fff?text=Image+1";
+        
+        // 초기 글로벌 표 더미데이터 삽입
+        globalTablesStorage.push([
+            [ {v:'분류1', bg:'#008275', c:'#ffffff', bd:'#cccccc'}, {v:'내용1', bg:'#008275', c:'#ffffff', bd:'#cccccc'}, {v:'특징1', bg:'#008275', c:'#ffffff', bd:'#cccccc'} ],
+            [ {v:'분류2', bg:'#ffffff', c:'#333333', bd:'#cccccc'}, {v:'내용2', bg:'#ffffff', c:'#333333', bd:'#cccccc'}, {v:'특징2', bg:'#ffffff', c:'#333333', bd:'#cccccc'} ],
+            [ {v:'분류3', bg:'#c9ddda', c:'#333333', bd:'#98d1c2'}, {v:'내용3', bg:'#c9ddda', c:'#333333', bd:'#98d1c2'}, {v:'특징3', bg:'#c9ddda', c:'#333333', bd:'#98d1c2'} ]
+        ]);
+        renderGlobalTables();
         
         addSectionUI({ 
             level: 1, 
             title: "1단계 문단 제목", 
-            content: "[사진:1|출처입력]\n\n[굵게:예시 텍스트를 강조합니다] 일반 텍스트 [링크:이곳을 클릭하면 링크로 이동합니다|https://google.com]\n원하는 색상으로 텍스트를 바꿀 수 있습니다 -◡- [색상: 예시 색상 텍스트|#008275]"     
+            content: "[사진:1|출처입력]\n\n[굵게:예시 텍스트를 강조합니다] 일반 텍스트 [링크:이곳을 클릭하면 링크로 이동합니다|https://google.com]\n원하는 색상으로 텍스트를 바꿀 수 있습니다 -◡- [색상: 예시 색상 텍스트|#008275]\n\n[표:1]"     
         }, [dummy1]);
         
         addSectionUI({     
@@ -947,7 +1251,7 @@
         addSectionUI({ 
             level: 3, 
             title: "3단계 세부적 문단 제목", 
-            content: "예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력 예시 텍스트 출력" 
+            content: "좌측의 ≡ 버튼을 눌러 문단 드래그 순서 변경도 가능해요!" 
         });
         
         updatePreview();
