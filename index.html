@@ -656,13 +656,52 @@
         document.getElementById('preview-area').innerHTML = generateFullHTML();
     }
 
-    function copyHTML() {
+   function copyHTML() {
         const finalHtml = generateFullHTML();
-        navigator.clipboard.writeText(finalHtml).then(() => {
-            alert("복사되었습니다! ( ᴗ ̫ ᴗ )");
-        }).catch(err => {
+
+        // 1. 최신 브라우저 및 보안 환경(HTTPS)인 경우
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(finalHtml).then(() => {
+                alert("복사되었습니다! ( ᴗ ̫ ᴗ )");
+            }).catch(err => {
+                // 실패 시 구형 방식으로 재시도
+                fallbackCopyTextToClipboard(finalHtml);
+            });
+        } else {
+            // 2. 모바일 인앱 브라우저나 HTTP 환경인 경우 구형 방식 사용
+            fallbackCopyTextToClipboard(finalHtml);
+        }
+    }
+
+    // 모바일/구형 브라우저용 복사 우회 함수
+    function fallbackCopyTextToClipboard(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // 화면이 아래로 튀는 현상을 방지하기 위한 스타일 설정
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+
+        document.body.appendChild(textArea);
+        
+        // 모바일(iOS) 환경에서 복사를 위한 선택 처리
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                alert("복사되었습니다! ( ᴗ ̫ ᴗ )");
+            } else {
+                alert("복사 실패 ㅠ.ㅠ 브라우저가 지원하지 않습니다.");
+            }
+        } catch (err) {
             alert("복사 실패 ㅠ.ㅠ 브라우저 권한을 확인해주세요!");
-        });
+        }
+
+        document.body.removeChild(textArea);
     }
 
     function saveAsImage() {
